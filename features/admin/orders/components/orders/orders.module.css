@@ -1,0 +1,554 @@
+.page {
+  --ui-page-padding: 8px 0 0;
+}
+
+.container {
+  width: min(var(--admin-shell-width), 100%);
+  margin: 0 auto;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  min-height: 50vh;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.hero {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+}
+
+.subtitle {
+  margin: 16px 0 0;
+  max-width: 760px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.statCard {
+  padding: clamp(18px, 2vw, 24px);
+  border-radius: var(--card-radius-lg);
+}
+
+.statLabel {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.statValue {
+  font-size: clamp(26px, 3vw, 30px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+.toolbarCard,
+.emptyCard,
+.orderCard {
+  border: 1px solid var(--glass-card-border);
+  border-radius: var(--card-radius-lg);
+  background: var(--glass-card-bg-strong);
+  box-shadow:
+    var(--glass-shadow),
+    var(--glass-highlight);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.toolbarCard {
+  margin-bottom: 24px;
+  padding: clamp(18px, 2.2vw, 24px);
+}
+
+.toolbarTop {
+  margin-bottom: 18px;
+}
+
+.sectionTitle {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 1.1;
+  color: var(--foreground);
+}
+
+.sectionText,
+.fetchingText {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.fetchingText {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  gap: 14px;
+  align-items: center;
+}
+
+.searchWrap {
+  min-width: 0;
+}
+
+.input,
+.select {
+  width: 100%;
+  height: 56px;
+  border: 1px solid var(--interactive-border);
+  border-radius: 18px;
+  padding: 0 18px;
+  font-size: 15px;
+  background: var(--interactive-surface);
+  color: var(--foreground);
+  outline: none;
+  box-shadow: var(--interactive-shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus,
+.select:focus {
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  background: var(--interactive-surface-hover);
+}
+
+.errorMessage {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--danger-border);
+  border-radius: 16px;
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  font-size: 14px;
+}
+
+.emptyCard {
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.emptyTitle {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.emptyText {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.ordersGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.orderCard {
+  padding: clamp(18px, 2vw, 22px);
+}
+
+.orderTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 14px;
+}
+
+.orderTopMain,
+.itemMain {
+  min-width: 0;
+}
+
+.orderTopSide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.orderNumber {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+.orderCustomer {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.orderDate {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.orderTotalValue {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background: var(--warning-bg);
+  color: var(--warning-fg);
+  border-color: var(--warning-border);
+}
+
+.statusConfirmed {
+  background: var(--success-bg);
+  color: var(--success-fg);
+  border-color: var(--success-border);
+}
+
+.statusShipped {
+  background: var(--info-bg);
+  color: var(--info-fg);
+  border-color: var(--info-border);
+}
+
+.statusCancelled {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  border-color: var(--danger-border);
+}
+
+.orderStatusNote {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--soft-panel-border);
+  border-radius: 16px;
+  background: var(--soft-panel-bg);
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.orderActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--glass-card-border);
+}
+
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.dangerButton,
+.doneLabel,
+.cancelledLabel {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.dangerButton {
+  cursor: pointer;
+  transition: transform 0.16s ease, opacity 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.primaryButton {
+  border: 1px solid var(--button-primary-border);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  box-shadow: var(--interactive-shadow-sm);
+}
+
+.secondaryButton {
+  border: 1px solid var(--interactive-border);
+  background: var(--interactive-surface);
+  color: var(--foreground);
+}
+
+.ghostButton {
+  border: 1px solid var(--interactive-border);
+  background: transparent;
+  color: var(--foreground);
+}
+
+.dangerButton {
+  border: 1px solid var(--danger-border);
+  background: color-mix(in srgb, var(--danger-bg) 45%, var(--surface));
+  color: var(--danger-fg);
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.ghostButton:hover,
+.dangerButton:hover {
+  transform: translateY(-1px);
+}
+
+.secondaryButton:hover,
+.ghostButton:hover {
+  background: var(--interactive-surface-hover);
+  border-color: var(--interactive-border-strong);
+}
+
+.dangerButton:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.ghostButton:disabled,
+.dangerButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.doneLabel,
+.cancelledLabel {
+  display: inline-flex;
+  align-items: center;
+}
+
+.doneLabel {
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  color: var(--info-fg);
+}
+
+.cancelledLabel {
+  background: color-mix(in srgb, var(--danger-bg) 35%, var(--surface));
+  border: 1px solid var(--danger-border);
+  color: var(--danger-fg);
+}
+
+.detailsPanel {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--glass-card-border);
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.detailsCard,
+.itemsBlock {
+  padding: 18px;
+  border: 1px solid var(--soft-panel-border);
+  border-radius: var(--card-radius-md);
+  background: var(--soft-panel-bg);
+}
+
+.itemsBlock {
+  background: color-mix(in srgb, var(--glass-card-bg-strong) 92%, transparent);
+}
+
+.detailsTitle {
+  margin: 0 0 14px;
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--foreground);
+}
+
+.detailsList {
+  display: grid;
+  gap: 10px;
+}
+
+.detailsList p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.detailsList span {
+  color: var(--text-muted);
+}
+
+.itemsTable {
+  display: grid;
+  gap: 12px;
+}
+
+.itemRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 80px 140px;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--glass-card-border);
+}
+
+.itemRow:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.itemName {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--foreground);
+  line-height: 1.35;
+}
+
+.itemMeta {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1.45;
+}
+
+.itemQty {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--foreground);
+  text-align: center;
+}
+
+.itemTotal {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--foreground);
+  text-align: right;
+}
+
+.noItems {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1080px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolbar,
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .itemRow {
+    grid-template-columns: 1fr;
+  }
+
+  .itemQty,
+  .itemTotal {
+    text-align: left;
+  }
+}
+
+@media (max-width: 720px) {
+  .orderTopRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .orderTopSide {
+    align-items: flex-start;
+  }
+
+  .orderActions {
+    justify-content: stretch;
+  }
+
+  .orderActions .primaryButton,
+  .orderActions .secondaryButton,
+  .orderActions .ghostButton,
+  .orderActions .dangerButton,
+  .orderActions .doneLabel,
+  .orderActions .cancelledLabel {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 680px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbarCard,
+  .emptyCard,
+  .orderCard,
+  .statCard {
+    border-radius: var(--card-radius-md);
+  }
+}

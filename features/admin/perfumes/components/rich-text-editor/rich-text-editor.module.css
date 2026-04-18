@@ -1,0 +1,136 @@
+.root {
+  display: grid;
+  gap: 10px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--glass-card-border);
+  border-radius: 12px;
+  background: var(--glass-card-bg-strong);
+  box-shadow:
+    var(--glass-shadow),
+    var(--glass-highlight);
+}
+
+.toolButton {
+  min-height: 36px;
+  border: 1px solid var(--interactive-border);
+  background: var(--interactive-surface);
+  color: var(--foreground);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: var(--interactive-shadow-sm);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.toolButton:hover {
+  background: var(--interactive-surface-hover);
+  border-color: var(--interactive-border-strong);
+  transform: translateY(-1px);
+}
+
+.active {
+  background: var(--accent-soft-bg-strong);
+  border-color: var(--accent-soft-border);
+  color: var(--foreground);
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--glass-card-border);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.editor {
+  border: 1px solid var(--glass-card-border);
+  border-radius: 12px;
+  background: var(--glass-card-bg-strong);
+  overflow: hidden;
+  box-shadow:
+    var(--glass-shadow),
+    var(--glass-highlight);
+}
+
+.editorContent {
+  min-height: 220px;
+  padding: 14px;
+  outline: none;
+  color: var(--foreground);
+  background: transparent;
+  line-height: 1.65;
+}
+
+.editorContent,
+.editorContent p,
+.editorContent h3,
+.editorContent li,
+.editorContent strong,
+.editorContent em,
+.editorContent u,
+.editorContent span {
+  color: var(--foreground);
+}
+
+.editorContent p {
+  margin: 0 0 12px;
+}
+
+.editorContent h3 {
+  margin: 16px 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.editorContent ul,
+.editorContent ol {
+  padding-left: 22px;
+  margin: 0 0 12px;
+}
+
+.editorContent blockquote {
+  margin: 0 0 12px;
+  padding-left: 14px;
+  border-left: 3px solid var(--warning-fg);
+  color: var(--text-muted);
+}
+
+.editorContent :global(.ProseMirror) {
+  min-height: 220px;
+  outline: none;
+  color: var(--foreground);
+  caret-color: var(--accent);
+}
+
+.editorContent :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+@media (max-width: 640px) {
+  .toolbar {
+    padding: 8px;
+  }
+
+  .toolButton {
+    flex: 0 0 auto;
+  }
+
+  .spacer,
+  .divider {
+    display: none;
+  }
+}

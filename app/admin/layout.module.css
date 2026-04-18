@@ -1,0 +1,21 @@
+.page {
+  min-height: calc(100dvh - var(--header-offset-desktop));
+  background: var(--background);
+  padding: clamp(24px, 3vw, 34px) var(--page-inline-lg) clamp(56px, 7vw, 84px);
+}
+
+.container {
+  width: min(var(--admin-shell-width), 100%);
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .page {
+    min-height: auto;
+    padding: 20px var(--page-inline) calc(32px + env(safe-area-inset-bottom));
+  }
+
+  .container {
+    width: 100%;
+  }
+}

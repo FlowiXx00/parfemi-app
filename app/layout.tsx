@@ -1,27 +1,58 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import TextFitProvider from "@/shared/providers/text-fit-provider";
 import "./globals.css";
 
-import Header from "./components/Header/header";
-import Footer from "./components/Footer/footer";
-import FlyToCartLayer from "./components/FlyToCartLayer/FlyToCartLayer";
-
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://atelierdekant.rs";
 
 export const metadata: Metadata = {
-  title: "Dush Dekant",
-  description: "Dekanti parfema",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Atelier Dekant",
+    template: "%s | Atelier Dekant",
+  },
+  description:
+    "Dekanti parfema, pažljivo birani mirisi i jednostavna online kupovina.",
+  applicationName: "Atelier Dekant",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "sr_RS",
+    url: siteUrl,
+    siteName: "Atelier Dekant",
+    title: "Atelier Dekant",
+    description:
+      "Dekanti parfema, pažljivo birani mirisi i jednostavna online kupovina.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Atelier Dekant",
+    description:
+      "Dekanti parfema, pažljivo birani mirisi i jednostavna online kupovina.",
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f4ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d1014" },
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="sr">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <FlyToCartLayer />
-        <Header />
+      <body>
+        <TextFitProvider />
         {children}
-        <Footer />
       </body>
     </html>
   );

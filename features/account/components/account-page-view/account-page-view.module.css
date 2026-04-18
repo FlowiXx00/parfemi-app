@@ -1,0 +1,92 @@
+.page {
+  --ui-page-min-height: 100vh;
+  --ui-page-padding: 96px var(--page-inline) 56px;
+}
+
+.loadingCard,
+.guestCard {
+  border-radius: 32px;
+}
+
+.loadingCard {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.guestCard {
+  min-height: 420px;
+  padding: 32px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.guestIcon {
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  background: var(--button-primary-bg);
+  color: var(--accent-contrast);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  box-shadow: var(--glass-shadow);
+}
+
+.guestTitle {
+  margin: 18px 0 0;
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.guestText {
+  margin: 12px 0 0;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.guestActions {
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  --ui-btn-height: 46px;
+  --ui-btn-padding: 0 16px;
+  --ui-btn-radius: 14px;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .page {
+    --ui-page-padding: 72px var(--page-inline) 40px;
+  }
+
+  .loadingCard,
+  .guestCard {
+    border-radius: 26px;
+  }
+
+  .guestCard {
+    min-height: auto;
+    padding: 24px 20px;
+  }
+
+  .guestTitle {
+    font-size: 28px;
+  }
+
+  .guestActions,
+  .primaryBtn,
+  .secondaryBtn {
+    width: 100%;
+  }
+}

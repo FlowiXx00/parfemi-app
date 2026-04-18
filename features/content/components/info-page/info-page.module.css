@@ -1,0 +1,150 @@
+.page {
+  --ui-page-padding: 40px 0 72px;
+}
+
+.hero {
+  border-radius: 30px;
+  padding: clamp(24px, 4vw, 36px);
+}
+
+.kicker {
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+}
+
+.intro {
+  max-width: 820px;
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  border-radius: 26px;
+  padding: 24px;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  --ui-glass-card-border: var(--glass-card-border-strong);
+  --ui-glass-card-shadow: var(--glass-shadow-strong);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.15;
+  color: var(--foreground);
+}
+
+.copy {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.copy p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--text-muted);
+}
+
+.cta {
+  margin-top: 18px;
+  border-radius: 28px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.ctaTitle {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.12;
+  color: var(--foreground);
+}
+
+.ctaText {
+  margin: 10px 0 0;
+  max-width: 700px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.actions {
+  justify-content: flex-start;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  min-width: 180px;
+}
+
+.primaryBtn:focus-visible,
+.secondaryBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-ring), var(--interactive-shadow-md);
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    --ui-page-padding: 24px 0 48px;
+  }
+
+  .hero,
+  .card,
+  .cta {
+    border-radius: 22px;
+  }
+
+  .card,
+  .cta {
+    padding: 18px;
+  }
+
+  .actions,
+  .primaryBtn,
+  .secondaryBtn {
+    width: 100%;
+  }
+}

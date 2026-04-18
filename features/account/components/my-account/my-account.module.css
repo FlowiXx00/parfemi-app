@@ -1,0 +1,672 @@
+.page {
+  --account-bg: var(--background);
+  --account-fg: var(--foreground);
+  --account-muted: var(--text-muted);
+
+  --account-border: var(--interactive-border);
+  --account-border-soft: var(--interactive-border-soft);
+  --account-border-hover: var(--interactive-border-hover);
+  --account-border-strong: var(--interactive-border-strong);
+
+  --account-surface: var(--interactive-surface);
+  --account-surface-2: var(--interactive-surface-hover);
+  --account-surface-3: var(--interactive-surface-active);
+  --account-soft: var(--interactive-soft-bg);
+
+  --account-shadow-sm: var(--interactive-shadow-sm);
+  --account-shadow-md: var(--interactive-shadow-md);
+  --account-shadow-lg: var(--interactive-shadow-lg);
+  --account-shadow-xl: var(--interactive-shadow-xl);
+  --account-highlight: var(--interactive-highlight);
+
+  width: var(--section-width);
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top,
+      color-mix(in srgb, var(--surface) 16%, transparent),
+      transparent 30%
+    ),
+    var(--account-bg);
+  padding: 96px var(--page-inline) calc(92px + env(safe-area-inset-bottom, 0px));
+  color: var(--account-fg);
+}
+
+.container {
+  width: var(--section-width);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.hero,
+.card,
+.statCard {
+  border: 1px solid var(--account-border-soft);
+  background: var(--account-surface);
+  box-shadow:
+    var(--account-shadow-lg),
+    var(--account-highlight);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.hero {
+  border-radius: 28px;
+  padding: 24px 26px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.heroLeft {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  width: 100%;
+}
+
+.avatarWrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  box-shadow: var(--account-shadow-md);
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatarFallback {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.heroText {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--account-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.08;
+  color: var(--account-fg);
+  word-break: break-word;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  max-width: 720px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--account-muted);
+}
+
+.userMeta {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.userPill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--account-soft);
+  border: 1px solid var(--account-border-soft);
+  color: var(--account-fg);
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.statsGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.statCard {
+  min-width: 0;
+  border-radius: 22px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.statIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: var(--account-soft);
+  color: var(--account-fg);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  flex: 0 0 auto;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--account-fg);
+  line-height: 1;
+}
+
+.statLabel {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--account-muted);
+}
+
+.contentGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.95fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.mainColumn,
+.sideColumn {
+  display: grid;
+  gap: 14px;
+  align-self: start;
+  min-width: 0;
+}
+
+.card {
+  min-width: 0;
+  border-radius: 26px;
+  padding: 22px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--account-fg);
+}
+
+.cardText {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--account-muted);
+}
+
+.actionGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.actionCard {
+  min-width: 0;
+  min-height: 76px;
+  padding: 16px;
+  border: 1px solid var(--account-border-soft);
+  border-radius: 20px;
+  background: var(--account-surface);
+  color: var(--account-fg);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: var(--account-shadow-sm);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.actionCard:hover {
+  transform: translateY(-1px);
+  border-color: var(--account-border-strong);
+  background: var(--account-surface-2);
+  box-shadow: var(--account-shadow-md);
+}
+
+.actionLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.actionIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: var(--account-soft);
+  color: var(--account-fg);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex: 0 0 auto;
+}
+
+.actionTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--account-fg);
+}
+
+.actionText {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--account-muted);
+}
+
+.actionArrow {
+  font-size: 18px;
+  color: var(--account-muted);
+  flex: 0 0 auto;
+}
+
+.emptyOrder {
+  min-height: 250px;
+  border: 1px dashed var(--account-border);
+  border-radius: 24px;
+  background: var(--account-surface-2);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.emptyOrderIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--account-soft);
+  color: var(--account-fg);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+
+.emptyOrderTitle {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--account-fg);
+}
+
+.emptyOrderText {
+  margin: 10px 0 18px;
+  max-width: 520px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--account-muted);
+}
+
+.primaryBtn {
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  border: 1px solid var(--button-primary-border);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  box-shadow: var(--account-shadow-sm);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-1px);
+  background: var(--button-primary-bg-hover);
+  border-color: var(--button-primary-border-hover);
+  box-shadow: var(--account-shadow-md);
+}
+
+.infoList {
+  display: grid;
+  gap: 12px;
+}
+
+.infoRow {
+  min-height: 62px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--account-surface-2);
+  border: 1px solid var(--account-border-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.infoLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--account-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.infoValue {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--account-fg);
+  word-break: break-word;
+}
+
+.tipBox {
+  border-radius: 22px;
+  padding: 18px;
+  background: var(--account-surface-2);
+  border: 1px solid var(--account-border-soft);
+}
+
+.tipTitle {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--account-fg);
+}
+
+.tipText {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--account-muted);
+}
+
+.latestOrderCard {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid var(--account-border-soft);
+  background: var(--account-surface-2);
+  box-shadow: var(--account-shadow-sm);
+}
+
+.latestOrderTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.latestOrderKicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--account-muted);
+}
+
+.latestOrderNumber {
+  margin-top: 8px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--account-fg);
+  word-break: break-word;
+}
+
+.latestOrderMeta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.latestOrderMetaItem {
+  min-height: 76px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--account-surface);
+  border: 1px solid var(--account-border-soft);
+  display: grid;
+  gap: 8px;
+  box-shadow: var(--account-shadow-sm);
+}
+
+.latestOrderMetaItem span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--account-muted);
+}
+
+.latestOrderMetaItem strong {
+  font-size: 16px;
+  color: var(--account-fg);
+  word-break: break-word;
+}
+
+@media (max-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sideColumn {
+    order: 2;
+  }
+}
+
+@media (max-width: 860px) {
+  .page {
+    padding-top: 84px;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero {
+    padding: 20px;
+  }
+
+  .heroLeft {
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .latestOrderMeta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .hero {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .heroLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .avatarWrap {
+    width: 64px;
+    height: 64px;
+  }
+
+  .avatarFallback {
+    font-size: 22px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .userMeta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .userPill {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 8px 12px;
+    border-radius: 14px;
+  }
+
+  .statCard {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .statValue {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .cardHead {
+    margin-bottom: 14px;
+  }
+
+  .cardTitle {
+    font-size: 20px;
+  }
+
+  .actionCard {
+    padding: 14px;
+    min-height: 72px;
+  }
+
+  .actionLeft {
+    gap: 12px;
+  }
+
+  .actionIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    font-size: 16px;
+  }
+
+  .actionTitle,
+  .infoValue,
+  .latestOrderMetaItem strong {
+    font-size: 14px;
+  }
+
+  .actionText,
+  .cardText,
+  .tipText,
+  .emptyOrderText,
+  .statLabel,
+  .latestOrderMetaItem span {
+    font-size: 12px;
+  }
+
+  .actionArrow {
+    display: none;
+  }
+
+  .latestOrderCard,
+  .tipBox {
+    padding: 16px;
+  }
+
+  .latestOrderNumber {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .hero,
+  .card,
+  .statCard {
+    border-radius: 20px;
+  }
+
+  .hero,
+  .card,
+  .statCard,
+  .latestOrderCard,
+  .tipBox,
+  .infoRow,
+  .latestOrderMetaItem,
+  .actionCard {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+}

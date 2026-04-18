@@ -1,0 +1,213 @@
+.page {
+  composes: page from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.bgGlowTop {
+  composes: bgGlowTop from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.bgGlowBottom {
+  composes: bgGlowBottom from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.blobLeft {
+  composes: blobLeft from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.blobRight {
+  composes: blobRight from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.blobBottom {
+  composes: blobBottom from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.card {
+  composes: card from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.brand {
+  composes: brand from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.title {
+  composes: title from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.subtitle {
+  composes: subtitle from "../../shared/ui/auth-shell/auth-shell.module.css";
+  max-width: 32ch;
+}
+
+.form {
+  composes: form from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.field {
+  composes: field from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.label {
+  composes: label from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.inputWrap {
+  composes: inputWrap from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.inputIcon {
+  composes: inputIcon from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.input {
+  composes: input from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.passwordToggle {
+  composes: passwordToggle from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.passwordToggleIcon {
+  composes: passwordToggleIcon from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.submitBtn {
+  composes: submitBtn from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.submitContent {
+  composes: submitContent from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.spinner {
+  composes: spinner from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.message {
+  composes: message from "../../shared/ui/auth-shell/auth-shell.module.css";
+}
+
+.topRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -2px;
+}
+
+.forgotLink,
+.registerLink {
+  color: var(--auth-muted);
+  text-decoration: none;
+  transition: color var(--ease-standard);
+}
+
+.forgotLink {
+  font-size: 0.92rem;
+}
+
+.registerLink {
+  font-weight: 800;
+  color: var(--auth-fg);
+}
+
+.forgotLink:hover,
+.registerLink:hover {
+  color: var(--auth-fg);
+}
+
+.divider {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1px;
+  background: var(--auth-border);
+}
+
+.divider span {
+  position: relative;
+  z-index: 1;
+  padding: 0 14px;
+  background: var(--auth-surface);
+  font-size: 0.92rem;
+  color: var(--auth-muted);
+}
+
+.socialRow {
+  display: flex;
+  justify-content: center;
+}
+
+.googleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  min-width: 164px;
+  max-width: 100%;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--auth-border);
+  background: var(--auth-surface);
+  color: var(--auth-fg);
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--auth-shadow-sm);
+  transition:
+    transform var(--ease-standard),
+    box-shadow var(--ease-standard),
+    background var(--ease-standard),
+    border-color var(--ease-standard),
+    opacity var(--ease-standard);
+}
+
+.googleBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--auth-surface-2);
+  border-color: var(--auth-border-strong);
+  box-shadow: var(--auth-shadow-md);
+}
+
+.googleBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.registerBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.registerText {
+  color: var(--auth-muted);
+  font-size: 0.96rem;
+}
+
+@media (max-width: 640px) {
+  .submitBtn,
+  .googleBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .forgotLink,
+  .divider span,
+  .registerText,
+  .registerLink {
+    font-size: 0.88rem;
+  }
+}
