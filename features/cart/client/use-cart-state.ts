@@ -5,15 +5,13 @@ import { readCart } from "@/features/cart/client/cart.storage";
 import type { CartItem } from "@/features/cart/types";
 
 export function useCartState() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => readCart());
 
   const refreshCart = useCallback(() => {
     setCartItems(readCart());
   }, []);
 
   useEffect(() => {
-    refreshCart();
-
     window.addEventListener("focus", refreshCart);
     window.addEventListener("storage", refreshCart);
     window.addEventListener("cart:updated", refreshCart);

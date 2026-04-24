@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
   FiArrowRight,
@@ -138,9 +139,12 @@ export default function MyAccount({
           <div className={styles.heroLeft}>
             <div className={styles.avatarWrap}>
               {userAvatarUrl ? (
-                <img
+                <Image
                   src={userAvatarUrl}
                   alt={userDisplayName}
+                  width={96}
+                  height={96}
+                  unoptimized
                   className={styles.avatarImage}
                 />
               ) : (

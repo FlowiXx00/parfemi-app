@@ -6,7 +6,7 @@ export function sanitizeNextPath(value: string | null | undefined) {
   }
 
   try {
-    const url = new URL(nextPath, "http://192.168.0.28:3000");
+    const url = new URL(nextPath, "https://atelierdekant.rs");
     return `${url.pathname}${url.search}${url.hash}` || "/";
   } catch {
     return "/";

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   memo,
   type SyntheticEvent,
@@ -243,9 +244,12 @@ function HeaderSearchComponent({ products, onNavigate }: HeaderSearchProps) {
                     className={styles.resultItem}
                   >
                     <div className={styles.thumb}>
-                      <img
+                      <Image
                         src={getPrimaryProductImage(product.id)}
                         alt={product.name}
+                        width={64}
+                        height={64}
+                        unoptimized
                         className={styles.thumbImage}
                         onError={handleImageError}
                       />

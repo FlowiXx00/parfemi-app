@@ -3,6 +3,7 @@
 import type { SyntheticEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/features/shop/types";
 import { addToCart } from "@/features/cart/client/cart.storage";
@@ -356,9 +357,12 @@ export default function DetailsClient({
                 aria-label={`Prikaži ${item.label}`}
                 title={item.label}
               >
-                <img
+                <Image
                   src={item.src}
                   alt={`${product.name} - ${item.label}`}
+                  width={96}
+                  height={96}
+                  unoptimized
                   className={styles.thumbImage}
                   onError={() => {
                     setHiddenImages((prev) =>
@@ -388,10 +392,13 @@ export default function DetailsClient({
               onClick={() => setLightboxOpen(true)}
               aria-label="Povećaj sliku"
             >
-              <img
+              <Image
                 ref={mainImageRef}
                 src={activeItem.src}
                 alt={`${product.name} - ${activeItem.label}`}
+                width={900}
+                height={900}
+                unoptimized
                 className={styles.mainImage}
                 onError={handleDisplayImageError}
               />
@@ -633,9 +640,12 @@ export default function DetailsClient({
               </button>
             )}
 
-            <img
+            <Image
               src={activeItem.src}
               alt={`${product.name} - ${activeItem.label}`}
+              width={1200}
+              height={1200}
+              unoptimized
               className={styles.lightboxImage}
               onMouseDown={(e) => e.stopPropagation()}
               onError={handleDisplayImageError}

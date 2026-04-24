@@ -263,7 +263,6 @@
   color: var(--footer-fg-local);
 }
 
-/* ===== Mobile bottom nav ===== */
 .mobileBottomNav {
   position: fixed;
   left: 0;
@@ -359,7 +358,6 @@
   text-align: center;
 }
 
-/* ===== Mobile profile sheet ===== */
 .mobileProfileBackdrop {
   position: fixed;
   inset: 0;

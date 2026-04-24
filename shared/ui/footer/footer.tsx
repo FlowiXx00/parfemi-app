@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -59,6 +60,7 @@ export default function Footer() {
   const [shopFiltersOpen, setShopFiltersOpen] = useState(false);
 
   const isShopPage = useMemo(() => pathname?.startsWith("/shop"), [pathname]);
+  const areShopFiltersActive = isShopPage && shopFiltersOpen;
 
   const isOrdersPage = useMemo(() => pathname?.startsWith("/orders") ?? false, [pathname]);
 
@@ -124,12 +126,6 @@ export default function Footer() {
       window.removeEventListener("cart:state", syncCartState as EventListener);
     };
   }, []);
-
-  useEffect(() => {
-    if (!isShopPage) {
-      setShopFiltersOpen(false);
-    }
-  }, [isShopPage]);
 
   const logout = useCallback(async () => {
     setProfileOpen(false);
@@ -275,11 +271,12 @@ export default function Footer() {
             <div className={styles.mobileProfileHeader}>
               <span className={styles.mobileProfileAvatar} aria-hidden="true">
                 {userAvatarUrl ? (
-                  <img
+                  <Image
                     src={userAvatarUrl}
                     alt={userDisplayName}
                     width={52}
                     height={52}
+                    unoptimized
                     className={styles.mobileProfileAvatarImage}
                   />
                 ) : authUser ? (
@@ -436,11 +433,11 @@ export default function Footer() {
           <button
             type="button"
             className={`${styles.mobileBottomItem} ${
-              shopFiltersOpen ? styles.mobileBottomItemActive : ""
+              areShopFiltersActive ? styles.mobileBottomItemActive : ""
             }`}
             onClick={openFilters}
             aria-label="Otvori filtere"
-            aria-pressed={shopFiltersOpen}
+            aria-pressed={areShopFiltersActive}
           >
             <FiSliders />
             <span>Filteri</span>

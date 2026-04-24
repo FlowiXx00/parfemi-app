@@ -181,7 +181,7 @@ export default function Header() {
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
 
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => readCart());
 
   const [searchProducts, setSearchProducts] = useState<SearchProduct[]>([]);
 
@@ -204,8 +204,6 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    refreshCart();
-
     window.addEventListener("focus", refreshCart);
     window.addEventListener("storage", refreshCart);
 
@@ -533,11 +531,12 @@ export default function Header() {
             >
               <span className={styles.accountAvatar} aria-hidden="true">
                 {userAvatarUrl ? (
-                  <img
+                  <Image
                     src={userAvatarUrl}
                     alt={userDisplayName}
                     width={36}
                     height={36}
+                    unoptimized
                     className={styles.accountAvatarImage}
                   />
                 ) : authUser ? (
@@ -554,11 +553,12 @@ export default function Header() {
                   <div className={styles.accountMenuHeader}>
                     <span className={styles.accountMenuAvatar} aria-hidden="true">
                       {userAvatarUrl ? (
-                        <img
+                        <Image
                           src={userAvatarUrl}
                           alt={userDisplayName}
                           width={44}
                           height={44}
+                          unoptimized
                           className={styles.accountAvatarImage}
                         />
                       ) : authUser ? (

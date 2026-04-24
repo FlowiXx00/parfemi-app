@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./cart-drawer.module.css";
 
@@ -43,7 +44,6 @@ export default function CartDrawer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  // lock scroll
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -58,7 +58,6 @@ export default function CartDrawer({
 
   return (
     <>
-      {/* Overlay */}
       <button
         className={`${styles.overlay} ${open ? styles.open : ""}`}
         onClick={onClose}
@@ -66,13 +65,11 @@ export default function CartDrawer({
         type="button"
       />
 
-      {/* Drawer */}
       <aside
         className={`${styles.drawer} ${open ? styles.open : ""}`}
         aria-hidden={!open}
         aria-label="Korpa"
       >
-        {/* Header */}
         <div className={styles.header}>
           <div className={styles.title}>Korpa</div>
 
@@ -81,7 +78,6 @@ export default function CartDrawer({
           </button>
         </div>
 
-        {/* Body */}
         <div className={styles.body}>
           {isEmpty ? (
             <div className={styles.emptyState}>
@@ -98,8 +94,14 @@ export default function CartDrawer({
                 <div key={`${it.id}-${it.ml}`} className={styles.item}>
                   <div className={styles.thumb}>
                     {it.imageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img className={styles.thumbImg} src={it.imageUrl} alt="" />
+                      <Image
+                        className={styles.thumbImg}
+                        src={it.imageUrl}
+                        alt=""
+                        width={64}
+                        height={64}
+                        unoptimized
+                      />
                     ) : (
                       <div className={styles.thumbPlaceholder}>img</div>
                     )}
@@ -158,7 +160,6 @@ export default function CartDrawer({
           )}
         </div>
 
-        {/* Footer (samo kad ima items) */}
         {!isEmpty && (
           <div className={styles.footer}>
             <div className={styles.totalRow}>
@@ -190,7 +191,6 @@ export default function CartDrawer({
   );
 }
 
-/* ===== Ikonica za empty state (kao na slici) ===== */
 function CartEmptyIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 64 64" fill="none" aria-hidden="true">

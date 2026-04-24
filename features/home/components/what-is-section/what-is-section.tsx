@@ -1,12 +1,11 @@
-"use client";
-
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./what-is-section.module.css";
 
 const items = [
-  "100% originalan sadržaj iz originalnog pakovanja",
-  "Kvalitetne staklene bočice od 3ml, 5ml i 10ml",
-  "Jednostavnije upoznavanje mirisa pre pune bočice",
+  "Originalan sadržaj iz originalnog pakovanja",
+  "Staklene bočice od 3ml, 5ml i 10ml",
+  "Manje rizika pri izboru sledećeg parfema",
 ];
 
 export default function WhatIsSection() {
@@ -16,20 +15,19 @@ export default function WhatIsSection() {
         <div className={styles.textCol}>
           <div className={styles.kicker}>Šta je Atelier Dekant?</div>
 
-          <h2 className={styles.h2}>Originalni parfemi u formatu koji vam daje sigurnost</h2>
+          <h2 className={styles.h2}>Originalni parfemi u formatu za stvarno testiranje</h2>
 
           <p className={styles.p}>
-            Atelier Dekant predstavlja pažljivo pripremljene dekante originalnih
-            dizajnerskih i niche parfema, namenjene svima koji žele da parfem
-            upoznaju pre kupovine cele bočice. Dekantovanje se vrši u
-            kontrolisanim uslovima, u kvalitetne staklene bočice, uz poseban
-            fokus na urednost, sigurnost i autentičnost sadržaja.
+            Atelier Dekant donosi pažljivo pripremljene dekante dizajnerskih i
+            niche parfema za sve koji žele da miris upoznaju pre kupovine cele
+            bočice. Svaki dekant se priprema uredno, u kvalitetnoj staklenoj
+            ambalaži, sa jasnim fokusom na autentičnost sadržaja.
           </p>
 
           <p className={styles.p}>
-            Poslujemo nezavisno od proizvođača i vlasnika parfemskih brendova,
-            sa ciljem da omogućimo jednostavnije, sigurnije i pristupačnije
-            otkrivanje mirisa — bez nagađanja i bez nepotrebnog troška.
+            Poslujemo nezavisno od proizvođača i vlasnika parfemskih brendova.
+            Naš cilj je jednostavnije i pristupačnije istraživanje mirisa, bez
+            nagađanja i nepotrebnog troška.
           </p>
 
           <div className={styles.points}>
@@ -50,14 +48,16 @@ export default function WhatIsSection() {
 
         <div className={styles.imageCol}>
           <div className={styles.card}>
-            <img
+            <Image
               src="/images/what-is-section.png"
               alt="Tom Ford parfemi i dekanti"
+              width={1350}
+              height={900}
+              sizes="(max-width: 980px) calc(100vw - 48px), 560px"
               className={styles.image}
-              loading="lazy"
             />
           </div>
-          <div className={styles.floatingNote}>Diskretno, uredno i autentično iskustvo kupovine.</div>
+          <div className={styles.floatingNote}>Uredno, diskretno i spremno za svakodnevno testiranje.</div>
         </div>
       </div>
     </section>

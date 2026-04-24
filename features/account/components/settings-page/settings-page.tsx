@@ -1,6 +1,7 @@
 "use client";
 
 import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
+import NextImage from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FiBell,
@@ -55,6 +56,8 @@ type ProfileRow = {
   full_name?: string | null;
   avatar_url?: string | null;
 };
+
+type SupabaseBrowserClient = NonNullable<ReturnType<typeof createClient>>;
 
 const PREFERENCES_STORAGE_KEY = "atelier-dekant:account-preferences";
 const MAX_AVATAR_FILE_SIZE = 5 * 1024 * 1024;
@@ -173,7 +176,7 @@ function normalizeAvatarUrl(value: string) {
   }
 }
 
-async function loadProfileRow(client: ReturnType<typeof createClient>, userId: string) {
+async function loadProfileRow(client: SupabaseBrowserClient, userId: string) {
   const { data, error } = await client
     .from("profiles")
     .select("id, email, full_name, avatar_url")
@@ -189,7 +192,7 @@ async function loadProfileRow(client: ReturnType<typeof createClient>, userId: s
 }
 
 async function saveProfileRow(
-  client: ReturnType<typeof createClient>,
+  client: SupabaseBrowserClient,
   payload: {
     id: string;
     email: string;
@@ -683,9 +686,12 @@ export default function SettingsPage() {
                     aria-label="Prikaži avatar u većem prikazu"
                     title="Klikni za veći prikaz"
                   >
-                    <img
+                    <NextImage
                       src={avatarUrl}
                       alt={profile.fullName || profile.email || "Avatar korisnika"}
+                      width={256}
+                      height={256}
+                      unoptimized
                       className={styles.avatarImage}
                     />
                     <span className={styles.avatarPreviewOverlay}>
@@ -1139,9 +1145,12 @@ export default function SettingsPage() {
               <FiX />
             </button>
 
-            <img
+            <NextImage
               src={avatarUrl}
               alt={profile.fullName || profile.email || "Avatar korisnika"}
+              width={512}
+              height={512}
+              unoptimized
               className={styles.avatarModalImage}
             />
           </div>

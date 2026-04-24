@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FiHeart, FiTrash2 } from "react-icons/fi";
 import styles from "./wishlist-page-view.module.css";
@@ -10,6 +11,8 @@ import {
   removeFromWishlist,
 } from "@/features/wishlist/client/wishlist.api";
 import type { WishlistItem } from "@/features/wishlist/types";
+
+const PRODUCT_IMAGE_FALLBACK = "/file.svg";
 
 type WishlistProduct = {
   id: string;
@@ -253,13 +256,15 @@ export default function WishlistPageView() {
                 <article key={product.id} className={styles.card}>
                   <Link href={`/shop/${product.id}`} className={styles.imageLink}>
                     <div className={styles.imageWrap}>
-                      <img
+                      <Image
                         src={`/perfumes/${product.id}/parfem.png`}
                         alt={product.name}
+                        width={600}
+                        height={600}
+                        unoptimized
                         className={styles.image}
-                        loading="lazy"
                         onError={(event) => {
-                          event.currentTarget.src = "/perfumes/no-image.png";
+                          event.currentTarget.src = PRODUCT_IMAGE_FALLBACK;
                         }}
                       />
                     </div>

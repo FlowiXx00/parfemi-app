@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { sanitizeNextPath } from "@/shared/lib/safe-next";
@@ -12,6 +12,14 @@ import { getSupabaseSetupMessage, hasSupabasePublicEnv } from "@/shared/supabase
 import styles from "./login.module.css";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isSupabaseConfigured = useMemo(() => hasSupabasePublicEnv(), []);

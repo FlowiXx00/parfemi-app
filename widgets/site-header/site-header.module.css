@@ -34,7 +34,6 @@
   background: color-mix(in srgb, var(--header-bg) 94%, transparent);
 }
 
-/* ===== Top Marquee ===== */
 .top {
   position: relative;
   z-index: 2;
@@ -70,7 +69,6 @@
   }
 }
 
-/* ===== Main bar ===== */
 .main {
   position: relative;
   z-index: 2;
@@ -215,7 +213,6 @@
   place-items: center;
 }
 
-/* ===== Account ===== */
 .accountWrap {
   position: relative;
   z-index: 4;
@@ -476,7 +473,6 @@
   background: var(--header-surface-2);
 }
 
-/* ===== Mobile nav ===== */
 .mobilePanel {
   position: absolute;
   top: 100%;
@@ -545,7 +541,6 @@
   touch-action: none;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 860px) {
   .main {
     position: relative;

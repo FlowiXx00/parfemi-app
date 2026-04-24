@@ -25,7 +25,7 @@ export function useSupabaseBrowser() {
 }
 
 async function loadUserProfile(
-  supabase: ReturnType<typeof createClient>,
+  supabase: NonNullable<ReturnType<typeof createClient>>,
   userId: string
 ) {
   const { data, error } = await supabase
@@ -57,21 +57,25 @@ export function useAuthUser(options?: {
 
   useEffect(() => {
     if (!enabled) {
-      setAuthUser(null);
-      setProfile(null);
-      setLoading(false);
+      queueMicrotask(() => {
+        setAuthUser(null);
+        setProfile(null);
+        setLoading(false);
+      });
       return;
     }
 
     if (!supabase) {
-      setAuthUser(null);
-      setProfile(null);
-      setLoading(false);
+      queueMicrotask(() => {
+        setAuthUser(null);
+        setProfile(null);
+        setLoading(false);
+      });
       return;
     }
 
+    const client = supabase;
     let active = true;
-    setLoading(true);
 
     async function hydrateUser(user: AuthUser | null) {
       if (!active) return;
@@ -84,7 +88,7 @@ export function useAuthUser(options?: {
         return;
       }
 
-      const nextProfile = await loadUserProfile(supabase, user.id);
+      const nextProfile = await loadUserProfile(client, user.id);
 
       if (!active) return;
 
@@ -95,7 +99,7 @@ export function useAuthUser(options?: {
     async function loadUser() {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await client.auth.getUser();
 
       await hydrateUser((user as AuthUser | null) ?? null);
     }
@@ -104,7 +108,8 @@ export function useAuthUser(options?: {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = client.auth.onAuthStateChange((_event, session) => {
+      setLoading(true);
       void hydrateUser((session?.user as AuthUser | null) ?? null);
     });
 

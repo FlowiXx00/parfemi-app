@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import {
   FiBox,
   FiCheckCircle,
@@ -741,9 +742,12 @@ export default function LoggedInOrdersView() {
                           {order.items.map((item) => (
                             <div key={item.id} className={styles.itemRow}>
                               {item.imageUrl ? (
-                                <img
+                                <Image
                                   src={item.imageUrl}
                                   alt={item.perfumeName}
+                                  width={72}
+                                  height={72}
+                                  unoptimized
                                   className={styles.itemImage}
                                 />
                               ) : (

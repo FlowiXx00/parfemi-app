@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import styles from "./perfumes.module.css";
 
 import {
@@ -467,9 +468,12 @@ export default function AdminPerfumesPage() {
 
                       <div className={styles.previewBox}>
                         {editor.image_url ? (
-                          <img
+                          <Image
                             src={editor.image_url}
                             alt=""
+                            width={240}
+                            height={240}
+                            unoptimized
                             className={styles.previewImage}
                           />
                         ) : (

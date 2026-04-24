@@ -37,8 +37,6 @@
   transform: translateX(0);
 }
 
-/* HEADER */
-
 .header {
   display: flex;
   align-items: center;
@@ -80,8 +78,6 @@
   outline-offset: 4px;
   border-radius: 8px;
 }
-
-/* BODY */
 
 .body {
   flex: 1;
@@ -235,8 +231,6 @@
   align-self: center;
 }
 
-/* FOOTER */
-
 .footer {
   padding: 16px;
   border-top: 1px solid var(--border);
@@ -315,8 +309,6 @@
   outline-offset: 3px;
 }
 
-/* EMPTY STATE */
-
 .emptyState {
   min-height: 100%;
   display: grid;
@@ -365,8 +357,6 @@
   outline: 2px solid color-mix(in srgb, var(--accent) 18%, transparent);
   outline-offset: 3px;
 }
-
-/* MOBILE */
 
 @media (max-width: 900px) {
   .overlay {
@@ -482,8 +472,6 @@
     flex-direction: column;
   }
 }
-
-/* REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {
   .overlay,

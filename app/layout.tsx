@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { getSiteUrl } from "@/shared/config/site";
 import TextFitProvider from "@/shared/providers/text-fit-provider";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://atelierdekant.rs";
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

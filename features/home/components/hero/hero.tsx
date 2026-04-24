@@ -1,9 +1,7 @@
-"use client";
-
 import Link from "next/link";
 import styles from "./hero.module.css";
 
-const highlights = ["100% originalni parfemi", "3ml • 5ml • 10ml", "Brza i sigurna kupovina"];
+const highlights = ["Originalni parfemi", "3ml • 5ml • 10ml", "Sigurna online kupovina"];
 
 export default function Hero() {
   return (
@@ -20,13 +18,13 @@ export default function Hero() {
 
           <h1 className={`${styles.h1} ${styles.reveal} ${styles.d1}`}>
             PREMIUM DEKANTI PARFEMA
-            <span className={styles.h1Accent}> za pametniji izbor mirisa</span>
+            <span className={styles.h1Accent}> za miris koji stvarno nosite</span>
           </h1>
 
           <p className={`${styles.p} ${styles.reveal} ${styles.d2}`}>
-            Otkrijte pažljivo odabrane dizajnerske i niche mirise kroz dekante,
-            isprobajte ih na svojoj koži i odlučite se za punu bočicu tek kada
-            budete sigurni da je to pravi parfem za vas.
+            Istražite dizajnerske i niche parfeme kroz pažljivo pripremljene dekante.
+            Nosite miris nekoliko dana, upoznajte ga na svojoj koži i odlučite bez
+            pritiska kupovine pune bočice.
           </p>
 
           <div className={`${styles.cta} ${styles.reveal} ${styles.d3}`}>
@@ -54,24 +52,24 @@ export default function Hero() {
         >
           <div className={styles.infoLabel}>Zašto dekant?</div>
 
-          <div className={styles.infoStat}>Pre kupovine pune bočice</div>
+          <div className={styles.infoStat}>Probajte pre pune bočice</div>
 
           <p className={styles.infoText}>
-            Manji format vam omogućava da parfem testirate nekoliko dana, u
-            različitim prilikama i temperaturama, bez nepotrebnog rizika.
+            Manji format vam daje vreme da parfem proverite u realnim uslovima:
+            tokom dana, u različitim prilikama i na svojoj koži.
           </p>
 
           <div className={styles.infoList}>
             <div className={styles.infoItem}>
               <span className={styles.infoItemTitle}>Autentičnost</span>
               <span className={styles.infoItemText}>
-                Originalni sadržaj iz originalnog pakovanja.
+                Originalan sadržaj iz originalnog pakovanja.
               </span>
             </div>
             <div className={styles.infoItem}>
               <span className={styles.infoItemTitle}>Iskustvo</span>
               <span className={styles.infoItemText}>
-                Probajte miris u realnim uslovima pre konačne odluke.
+                Upoznajte miris kroz vreme, ne samo na prvi utisak.
               </span>
             </div>
           </div>

@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
       active = false;
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, [supabase, supabaseSetupMessage]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

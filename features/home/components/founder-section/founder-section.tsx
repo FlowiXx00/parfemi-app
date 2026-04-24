@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import styles from "./founder-section.module.css";
 
 export default function FounderSection() {
@@ -8,13 +7,15 @@ export default function FounderSection() {
       <div className={styles.wrap}>
         <div className={styles.media}>
           <div className={styles.card}>
-            <img
+            <Image
               src="/images/founder-section.png"
               alt="Atelier Dekant dekanti i parfemi"
+              width={1536}
+              height={1024}
+              sizes="(max-width: 980px) calc(100vw - 48px), 52vw"
               className={styles.img}
-              loading="lazy"
             />
-            <div className={styles.mediaBadge}>Pažljivo birani mirisi</div>
+            <div className={styles.mediaBadge}>Pažljivo pripremljeni dekanti</div>
           </div>
 
           <div className={styles.overlay} aria-hidden="true" />
@@ -26,24 +27,23 @@ export default function FounderSection() {
             <div className={styles.kicker}>Naša priča</div>
           </div>
 
-          <h2 className={styles.h2}>Kako je nastao Atelier Dekant</h2>
+          <h2 className={styles.h2}>Zašto postoji Atelier Dekant</h2>
 
           <p className={styles.lead}>
-            Želeli smo da izbor parfema učinimo jednostavnijim, sigurnijim i
-            pristupačnijim — bez pritiska da kupite celu bočicu pre nego što
-            zaista upoznate miris.
+            Parfem ne pokazuje sve na papiriću. Tek na koži, kroz nekoliko sati
+            i nekoliko nošenja, postaje jasno da li je zaista vaš.
           </p>
 
           <div className={styles.quote}>
-            {`„Atelier Dekant je nastao iz želje da izbor parfema učinimo jednostavnijim, sigurnijim i pristupačnijim. Verujemo da parfem treba prvo doživeti na svojoj koži, u svom ritmu i kroz vreme, pre odluke o celoj bočici.
+            {`„Atelier Dekant je nastao iz želje da izbor parfema bude mirniji, sigurniji i ličniji. Umesto brze odluke u parfimeriji, želimo da miris doživite u svom danu, na svojoj koži i u svom ritmu.
 
-Zato pažljivo pripremamo dekante originalnih parfema, sa fokusom na autentičnost, transparentnost i iskustvo koje uliva poverenje. Naš cilj nije samo da ponudimo miris, već da vam pomognemo da pronađete onaj pravi.”`}
+Zato pripremamo dekante originalnih parfema uz fokus na urednost, autentičnost i poverenje. Naš cilj nije samo da ponudimo miris, već da vam pomognemo da prepoznate onaj koji se prirodno uklapa u vas.”`}
           </div>
 
           <div className={styles.metaRow}>
             <div>
               <div className={styles.metaLabel}>Fokus</div>
-              <div className={styles.metaValue}>Autentičnost i poverenje</div>
+              <div className={styles.metaValue}>Autentičnost, urednost i poverenje</div>
             </div>
             <div>
               <div className={styles.metaLabel}>Format</div>

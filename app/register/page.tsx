@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { sanitizeNextPath } from "@/shared/lib/safe-next";
@@ -11,6 +11,14 @@ import { getSupabaseSetupMessage, hasSupabasePublicEnv } from "@/shared/supabase
 import styles from "./register.module.css";
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={null}>
+      <RegisterPageContent />
+    </Suspense>
+  );
+}
+
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isSupabaseConfigured = useMemo(() => hasSupabasePublicEnv(), []);

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/shared/config/site";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://atelierdekant.rs";
+const siteUrl = getSiteUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {

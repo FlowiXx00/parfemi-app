@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   memo,
@@ -21,6 +22,8 @@ import styles from "./product-card.module.css";
 function formatRsd(n: number) {
   return new Intl.NumberFormat("sr-RS").format(n) + " rsd";
 }
+
+const PRODUCT_IMAGE_FALLBACK = "/file.svg";
 
 function priceRange(product: Product) {
   if (!product.variants.length) {
@@ -147,7 +150,7 @@ function ProductCardComponent({
 
   const handleImageError = useCallback(
     (event: SyntheticEvent<HTMLImageElement>) => {
-      event.currentTarget.src = "/perfumes/no-image.png";
+      event.currentTarget.src = PRODUCT_IMAGE_FALLBACK;
     },
     []
   );
@@ -171,11 +174,13 @@ function ProductCardComponent({
       </button>
 
       <div className={styles.imageWrap}>
-        <img
+        <Image
           src={`/perfumes/${product.id}/parfem.png`}
           alt={product.name}
+          width={600}
+          height={600}
+          unoptimized
           className={styles.image}
-          loading="lazy"
           onError={handleImageError}
         />
       </div>
@@ -230,7 +235,7 @@ function ProductCardComponent({
             )}
           </div>
 
-          <Stars rating={product.rating} votes={product.votes} />
+          <Stars rating={product.rating ?? null} votes={product.votes ?? null} />
         </div>
       </div>
     </article>

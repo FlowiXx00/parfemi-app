@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./cart-page.module.css";
 import type { AddressRow } from "@/features/account/types";
@@ -463,11 +464,13 @@ export default function CartPageClient() {
                     >
                       <div className={styles.thumbWrap}>
                         {item.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
+                          <Image
                             className={styles.thumb}
                             src={item.imageUrl}
                             alt={item.name}
+                            width={96}
+                            height={96}
+                            unoptimized
                           />
                         ) : (
                           <div className={styles.thumbPlaceholder}>
