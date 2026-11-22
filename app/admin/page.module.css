@@ -1,0 +1,155 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ---------- Key numbers ---------- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.kpi {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.kpiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.kpiLabel {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.kpiIcon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 14%, transparent);
+  color: var(--gold, #d2b070);
+  font-size: 18px;
+}
+
+.kpiValue {
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpiHint {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.delta {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+.up {
+  background: color-mix(in srgb, #4cbf7e 16%, transparent);
+  color: #8fe0b0;
+}
+
+.down {
+  background: color-mix(in srgb, #e45f5f 16%, transparent);
+  color: #ffb4b4;
+}
+
+/* ---------- Best sellers + recent orders ---------- */
+.split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.recent {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recent li + li {
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 6px;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.recentRow:hover {
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+}
+
+.recentMain {
+  display: grid;
+  min-width: 0;
+}
+
+.recentMain strong {
+  font-size: 14px;
+}
+
+.recentMain small {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentSide {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1200px) {
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}

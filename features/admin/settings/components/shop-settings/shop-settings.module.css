@@ -1,0 +1,75 @@
+.grid {
+  display: grid;
+  /* Width-limited columns aligned left (the admin shell centers elements that have a max-width) */
+  grid-template-columns: minmax(0, 560px) minmax(0, 420px);
+  gap: 16px;
+  align-items: start;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.amount {
+  max-width: 220px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preview {
+  display: grid;
+  gap: 12px;
+}
+
+.previewLead {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--gold, #d2b070);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--gold, #d2b070) 8%, transparent);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.examples {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.examples li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+  font-size: 14px;
+}
+
+.examples li:last-child {
+  border-bottom: 0;
+}
+
+.examples span {
+  color: var(--text-muted);
+}
+
+.examples strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.free {
+  color: #8fe0b0;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

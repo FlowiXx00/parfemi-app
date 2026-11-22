@@ -1,0 +1,150 @@
+.section {
+  width: 100%;
+  padding: clamp(40px, 6vw, 80px) 0 clamp(24px, 4vw, 48px);
+  color: var(--foreground);
+}
+
+.wrap {
+  width: var(--section-width-wide);
+  margin: 0 auto;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 24px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--interactive-border);
+  background: var(--interactive-surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.h2 {
+  margin: 14px 0 0;
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+}
+
+.p {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  font-size: clamp(14px, 1.4vw, 16px);
+}
+
+.allLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 1px solid var(--button-primary-border);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.allLink:hover {
+  transform: translateY(-2px);
+  background: var(--button-primary-bg-hover, var(--button-primary-bg));
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 20px);
+}
+
+/* ---------- Brendovi ---------- */
+.brands {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+
+.brandsLabel {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.brandList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.brandChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--interactive-border);
+  background: var(--interactive-surface);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.brandChip span {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.brandChip:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--gold, #c7a567) 60%, transparent);
+  background: var(--interactive-surface-hover);
+}
+
+.brandChipAll {
+  border-style: dashed;
+  color: var(--gold, #c7a567);
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .allLink {
+    width: 100%;
+    justify-content: center;
+  }
+}

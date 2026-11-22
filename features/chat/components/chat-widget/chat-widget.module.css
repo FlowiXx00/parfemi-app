@@ -1,0 +1,448 @@
+/*
+ * ================= Bubble in the bottom LEFT corner =================
+ * Left, because the right side is taken: the cart drawer opens from the right, and on the cart page
+ * the order summary and checkout button are on the right.
+ */
+.launcher {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 1100; /* below the perfume quick view (1200) and the cart drawer */
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid var(--color-gold-border, rgba(199, 165, 103, 0.45));
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d9b878 0%, #b8925a 100%);
+  color: #1b150e;
+  box-shadow: 0 14px 34px -12px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: launcherIn 420ms cubic-bezier(0.22, 0.8, 0.24, 1) both;
+}
+
+.launcher svg {
+  font-size: 28px;
+}
+
+/* Subtle gold pulse around the bubble (to get noticed), only a few times */
+.launcher::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 2px solid rgba(217, 184, 120, 0.6);
+  animation: ping 2.4s ease-out 1.2s 3 both;
+  pointer-events: none;
+}
+
+@keyframes ping {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.launcher:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* "AI savetnik" label to the right of the bubble, desktop only, on hover */
+.launcherTip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  border-radius: 999px;
+  background: var(--color-surface, #1d1f24);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: translate(-6px, -50%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.launcher:hover .launcherTip,
+.launcher:focus-visible .launcherTip {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+@keyframes launcherIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ================= Chat window ================= */
+.panel {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 1150;
+  display: flex;
+  flex-direction: column;
+  width: min(390px, calc(100% - 32px));
+  height: min(600px, calc(100dvh - 140px));
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 22px;
+  background: var(--color-surface, #1d1f24);
+  color: var(--color-text);
+  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  animation: panelIn 320ms cubic-bezier(0.22, 0.8, 0.24, 1) both;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  background: color-mix(in srgb, var(--color-gold) 8%, transparent);
+}
+
+.headIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d9b878 0%, #b8925a 100%);
+  color: #1b150e;
+  font-size: 20px;
+}
+
+.headTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.head strong {
+  display: block;
+  font-size: 15px;
+}
+
+.headSub {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.headActions {
+  display: flex;
+  gap: 6px;
+}
+
+.headActions button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.headActions button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* ---------- Poruke ---------- */
+.list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.welcome p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestions button {
+  padding: 8px 12px;
+  border: 1px solid var(--color-gold-border, rgba(199, 165, 103, 0.4));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestions button:hover {
+  background: color-mix(in srgb, var(--color-gold) 12%, transparent);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 88%;
+}
+
+.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.assistant {
+  align-self: flex-start;
+}
+
+.bubble {
+  padding: 10px 13px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.user .bubble {
+  border-bottom-right-radius: 4px;
+  background: linear-gradient(135deg, #d9b878 0%, #b8925a 100%);
+  color: #1b150e;
+}
+
+.assistant .bubble {
+  border-bottom-left-radius: 4px;
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+
+.error .bubble {
+  background: color-mix(in srgb, #e57373 16%, transparent);
+  color: var(--color-text);
+}
+
+/* "typing..." */
+.typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 14px 16px;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  animation: typing 1s ease-in-out infinite;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typing {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* ---------- Recommended perfume cards ---------- */
+.cards {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-text) 3%, transparent);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--color-gold);
+  background: color-mix(in srgb, var(--color-gold) 8%, transparent);
+}
+
+.cardImage {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #0f1014;
+  overflow: hidden;
+}
+
+.cardImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cardText {
+  display: grid;
+  min-width: 0;
+}
+
+.cardText small {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.cardText strong {
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardText span {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Unos ---------- */
+.form {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 12px 6px;
+  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+.form textarea {
+  flex: 1;
+  min-height: 42px;
+  max-height: 120px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px; /* 16px: iPhone doesn't zoom the page when the field is focused */
+  line-height: 1.4;
+  resize: none;
+}
+
+.form textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.form button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d9b878 0%, #b8925a 100%);
+  color: #1b150e;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disclaimer {
+  margin: 0;
+  padding: 0 14px 10px;
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ================= Mobile: above the bottom navigation ================= */
+@media (max-width: 860px) {
+  .launcher {
+    left: 12px;
+    bottom: calc(var(--mobile-bottom-nav-height, 74px) + 12px);
+    width: 50px;
+    height: 50px;
+  }
+
+  .launcher svg {
+    font-size: 25px;
+  }
+
+  .launcherTip {
+    display: none; /* no hover on phones */
+  }
+
+  .panel {
+    right: 8px;
+    left: 8px;
+    bottom: calc(var(--mobile-bottom-nav-height, 74px) + 8px);
+    width: auto;
+    height: min(560px, calc(100dvh - var(--mobile-bottom-nav-height, 74px) - 96px));
+    border-radius: 18px;
+  }
+}

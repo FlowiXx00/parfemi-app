@@ -1,0 +1,141 @@
+/* Skeletons while the shop / a perfume loads: same layout as the real page, no content jumping. */
+.container {
+  width: var(--section-width-wide);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 28px var(--page-inline) 40px;
+}
+
+.block {
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--foreground) 6%, transparent) 50%,
+      transparent 100%
+    )
+    0 0 / 200% 100% no-repeat,
+    color-mix(in srgb, var(--foreground) 6%, transparent);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 150% 0, 0 0;
+  }
+  to {
+    background-position: -50% 0, 0 0;
+  }
+}
+
+.panel {
+  border: 1px solid var(--interactive-border-soft);
+  border-radius: var(--card-radius-lg, 22px);
+  background: var(--interactive-surface);
+}
+
+/* ---------- Shop ---------- */
+.header {
+  display: grid;
+  gap: 12px;
+  padding: 28px 30px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.sidebar {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  height: 620px;
+  padding: 18px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.card {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding-bottom: 14px;
+  border-radius: var(--card-radius-md, 18px);
+  border: 1px solid var(--interactive-border-soft);
+  overflow: hidden;
+}
+
+.card > :first-child {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 0;
+}
+
+/* ---------- Parfem ---------- */
+.product {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+  gap: 36px;
+  margin-top: 20px;
+}
+
+.visual {
+  min-height: 560px;
+  border-radius: var(--card-radius-lg, 22px);
+}
+
+.buy {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding-top: 10px;
+}
+
+.volumes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .layout,
+  .product {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .visual {
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+  }
+}

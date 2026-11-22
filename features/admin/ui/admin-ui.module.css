@@ -1,0 +1,344 @@
+/* Shared admin building blocks (header, panels, buttons, status badges). */
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px 24px;
+  margin-bottom: 22px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.pageSubtitle {
+  margin: 6px 0 0;
+  max-width: 680px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.pageActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.panel {
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, #13161b 88%, transparent);
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.panelLink {
+  color: var(--gold, #d2b070);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.panelLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn,
+.btnPrimary,
+.btnDanger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
+.btnPrimary {
+  border-color: transparent;
+  background: var(--gold, #d2b070);
+  color: #17140e;
+}
+
+.btnPrimary:hover {
+  filter: brightness(1.06);
+}
+
+.btnDanger {
+  border-color: color-mix(in srgb, #e45f5f 40%, transparent);
+  background: color-mix(in srgb, #e45f5f 10%, transparent);
+  color: #ffb4b4;
+}
+
+.btn:disabled,
+.btnPrimary:disabled,
+.btnDanger:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.panelIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 14%, transparent);
+  color: var(--gold, #d2b070);
+  font-size: 18px;
+}
+
+.panelTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- Forme ---------- */
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 11px;
+  background: #0f1216;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.textarea {
+  min-height: 90px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: color-mix(in srgb, var(--gold, #d2b070) 70%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold, #d2b070) 18%, transparent);
+}
+
+.inputSuffix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputSuffix .input {
+  padding-right: 48px;
+}
+
+.inputSuffix span {
+  position: absolute;
+  right: 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 750;
+  pointer-events: none;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Switch (checkbox styled as a toggle) */
+.switchRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--foreground) 2%, transparent);
+  cursor: pointer;
+}
+
+.switchText {
+  display: grid;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.switchText small {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.switch {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 22px;
+  margin: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 16%, transparent);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.18s ease;
+}
+
+.switch:checked {
+  background: var(--gold, #d2b070);
+}
+
+.switch:checked::after {
+  transform: translateX(18px);
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--gold, #d2b070);
+  outline-offset: 2px;
+}
+
+/* Messages after saving */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, #4cbf7e 35%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, #4cbf7e 10%, transparent);
+  color: #a9ebc4;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.noticeError {
+  border-color: color-mix(in srgb, #e45f5f 40%, transparent);
+  background: color-mix(in srgb, #e45f5f 10%, transparent);
+  color: #ffb4b4;
+}
+
+.loading {
+  padding: 40px 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.empty {
+  padding: 36px 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Order status badges */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status_pending {
+  background: color-mix(in srgb, #d2b070 18%, transparent);
+  color: #e6c88e;
+}
+
+.status_confirmed {
+  background: color-mix(in srgb, #6aa5e8 18%, transparent);
+  color: #9cc4f2;
+}
+
+.status_shipped {
+  background: color-mix(in srgb, #a68be8 18%, transparent);
+  color: #c4b1f2;
+}
+
+.status_received {
+  background: color-mix(in srgb, #4cbf7e 18%, transparent);
+  color: #8fe0b0;
+}
+
+.status_cancelled {
+  background: color-mix(in srgb, var(--foreground) 9%, transparent);
+  color: var(--text-muted);
+}

@@ -1,0 +1,343 @@
+/*
+ * Admin shell. The dark theme is locked via <html data-theme="dark"> (see the admin layout),
+ * so older admin pages use the same dark tokens.
+ */
+.shell {
+  --admin-sidebar: 256px;
+  --admin-bg: #0b0d11;
+  --admin-panel: #13161b;
+  --admin-line: color-mix(in srgb, var(--foreground) 8%, transparent);
+
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: var(--admin-sidebar) minmax(0, 1fr);
+  background:
+    radial-gradient(1200px 600px at 100% -10%, color-mix(in srgb, var(--gold, #d2b070) 7%, transparent), transparent 60%),
+    var(--admin-bg);
+  color: var(--foreground);
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 14px 14px;
+  border-right: 1px solid var(--admin-line);
+  background: color-mix(in srgb, var(--admin-panel) 92%, transparent);
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 14px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--foreground);
+  text-decoration: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.1;
+}
+
+.logo small {
+  display: block;
+  margin-top: 2px;
+  color: var(--gold, #d2b070);
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.logoMark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 16%, transparent);
+  color: var(--gold, #d2b070);
+  font-size: 15px;
+}
+
+.brand .closeBtn {
+  display: none;
+}
+
+.nav {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  flex: 1;
+}
+
+.group {
+  display: grid;
+  gap: 2px;
+}
+
+.groupLabel {
+  padding: 0 12px 6px;
+  color: color-mix(in srgb, var(--text-muted) 75%, transparent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.link:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.linkActive {
+  background: color-mix(in srgb, var(--gold, #d2b070) 13%, transparent);
+  color: var(--foreground);
+}
+
+.linkActive::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--gold, #d2b070);
+}
+
+.linkIcon {
+  flex: none;
+  font-size: 19px;
+}
+
+.linkActive .linkIcon {
+  color: var(--gold, #d2b070);
+}
+
+.badge {
+  margin-left: auto;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--gold, #d2b070);
+  color: #17140e;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 22px;
+  text-align: center;
+}
+
+.footer {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--admin-line);
+}
+
+.footerLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--admin-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold, #d2b070), #8f6f35);
+  color: #17140e;
+  font-weight: 900;
+}
+
+.userText {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+}
+
+.userText strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userText small {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.iconBtn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 19px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.iconBtn:hover {
+  border-color: var(--admin-line);
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  color: var(--foreground);
+}
+
+/* ---------- Content ---------- */
+.main {
+  min-width: 0;
+  padding: clamp(20px, 3vw, 36px) clamp(16px, 3vw, 40px) 64px;
+}
+
+.main > * {
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+/* Demo account banner (portfolio preview) */
+.demoBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--gold, #d2b070) 40%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 9%, transparent);
+  color: var(--foreground);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.demoBanner svg {
+  flex-shrink: 0;
+  color: var(--gold, #d2b070);
+  font-size: 18px;
+}
+
+/* Older admin pages have their own "glass" background; inside the new shell the background is shared. */
+.main :global(.ui-page-glass) {
+  min-height: 0;
+  padding-top: 0;
+  background: transparent;
+}
+
+/* ---------- Telefon / tablet ---------- */
+.mobileBar,
+.scrim {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .mobileBar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--admin-line);
+    background: color-mix(in srgb, var(--admin-panel) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .mobileTitle {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    display: block;
+    border: 0;
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    width: min(300px, 86vw);
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.22, 0.8, 0.24, 1);
+    background: var(--admin-panel);
+  }
+
+  .sidebarOpen {
+    transform: none;
+  }
+
+  .brand .closeBtn {
+    display: grid;
+  }
+
+  .main {
+    padding: 18px 14px 48px;
+  }
+}

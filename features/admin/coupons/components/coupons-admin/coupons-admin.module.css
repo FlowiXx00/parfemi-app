@@ -1,0 +1,274 @@
+/* ---------- Brojevi ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  display: grid;
+  gap: 4px;
+}
+
+.stat span {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.stat strong {
+  font-size: 26px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+/* ---------- Coupon list ---------- */
+.list {
+  display: grid;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 14px;
+  transition: background 0.15s ease;
+}
+
+.item + .item {
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+
+.item:hover {
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+}
+
+.itemActive,
+.itemActive:hover {
+  background: color-mix(in srgb, var(--gold, #d2b070) 8%, transparent);
+  box-shadow: inset 3px 0 0 var(--gold, #d2b070);
+}
+
+.itemMuted .ticket,
+.itemMuted .itemValue {
+  opacity: 0.55;
+}
+
+.itemMain {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 6px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Code styled as a "coupon" with a dashed border */
+.ticket {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 120px;
+  padding: 8px 12px;
+  border: 1px dashed color-mix(in srgb, var(--gold, #d2b070) 60%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 8%, transparent);
+  color: var(--gold, #d2b070);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.itemInfo {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemValue {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.itemMeta {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.statusActive {
+  background: color-mix(in srgb, #4cbf7e 16%, transparent);
+  color: #8fe0b0;
+}
+
+.statusScheduled {
+  background: color-mix(in srgb, #6aa5e8 16%, transparent);
+  color: #9cc4f2;
+}
+
+.statusOff {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+  color: var(--text-muted);
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.toggle {
+  display: inline-flex;
+}
+
+.deleteBtn {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: color-mix(in srgb, #e45f5f 12%, transparent);
+  color: #ffb4b4;
+}
+
+/* ---------- Forma ---------- */
+.form {
+  position: sticky;
+  top: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.inline {
+  display: flex;
+  gap: 8px;
+}
+
+.codeInput {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* The datetime field has a wide intrinsic width; this makes it fit in half a row */
+.row input[type="datetime-local"] {
+  padding: 0 8px;
+  font-size: 13px;
+}
+
+.preview {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--gold, #d2b070);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--gold, #d2b070) 8%, transparent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .form {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .stat strong {
+    font-size: 20px;
+  }
+
+  .stat span {
+    font-size: 11px;
+  }
+
+  .item {
+    flex-wrap: wrap;
+  }
+
+  .itemMain {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .itemInfo {
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  .itemMeta {
+    white-space: normal;
+  }
+
+  .itemActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

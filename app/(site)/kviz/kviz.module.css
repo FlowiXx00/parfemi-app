@@ -1,0 +1,39 @@
+.page {
+  width: var(--section-width-narrow);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) 0 clamp(48px, 7vw, 88px);
+  color: var(--foreground);
+}
+
+.head {
+  margin-bottom: clamp(20px, 3vw, 32px);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--interactive-border);
+  background: var(--interactive-surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 12px 0 0;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+.lead {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  font-size: clamp(15px, 1.5vw, 17px);
+}

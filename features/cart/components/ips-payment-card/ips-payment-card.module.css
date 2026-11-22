@@ -1,0 +1,165 @@
+.card {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 20px;
+  border: 1px solid color-mix(in srgb, var(--gold, #d2b070) 35%, transparent);
+  border-radius: var(--card-radius-md, 18px);
+  background:
+    radial-gradient(420px 180px at 0% 0%, color-mix(in srgb, var(--gold, #d2b070) 10%, transparent), transparent 70%),
+    var(--surface);
+  text-align: left;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 14%, transparent);
+  color: var(--gold, #d2b070);
+  font-size: 22px;
+}
+
+.title {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 17px;
+  font-weight: 850;
+}
+
+.sub {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.qrWrap {
+  display: grid;
+  gap: 8px;
+}
+
+/* QR always on a white background (even in dark theme) so cameras read it reliably */
+.qr {
+  padding: 10px;
+  border-radius: 14px;
+  background: #fff;
+  line-height: 0;
+}
+
+.qr svg {
+  width: 100%;
+  height: auto;
+}
+
+.qrHint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.details {
+  display: grid;
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row dt {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.row dd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.row dd span {
+  overflow-wrap: anywhere;
+}
+
+.copy {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--interactive-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.copy:hover {
+  border-color: var(--gold, #d2b070);
+  color: var(--gold, #d2b070);
+}
+
+.note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qrWrap {
+    justify-items: center;
+  }
+
+  .qr {
+    width: 210px;
+  }
+
+  .qrHint {
+    text-align: center;
+  }
+
+  .row {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}

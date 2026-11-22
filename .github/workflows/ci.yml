@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Fast checks: no secrets or database needed
+  check:
+    name: Lint, types and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+
+  # Build + E2E in a real browser. Needs Supabase secrets (Settings → Secrets → Actions);
+  # skipped without them. Order and coupon requests are intercepted, so the database isn't modified.
+  e2e:
+    name: Build and E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: check
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    steps:
+      - name: Check for Supabase secrets
+        id: secrets
+        run: |
+          if [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] && [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Supabase secrets not configured, skipping E2E."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.secrets.outputs.ok == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.secrets.outputs.ok == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: steps.secrets.outputs.ok == 'true'
+      - run: npx playwright install --with-deps chromium
+        if: steps.secrets.outputs.ok == 'true'
+      - run: npm run build
+        if: steps.secrets.outputs.ok == 'true'
+      - run: npm run test:e2e
+        if: steps.secrets.outputs.ok == 'true'
+      - uses: actions/upload-artifact@v4
+        if: failure() && steps.secrets.outputs.ok == 'true'
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

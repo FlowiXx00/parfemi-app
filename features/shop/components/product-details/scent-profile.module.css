@@ -1,0 +1,204 @@
+.profile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 14px;
+}
+
+.block {
+  padding: 18px 20px;
+  border: 1px solid var(--product-border-soft, var(--interactive-border-soft));
+  border-radius: 20px;
+  background: var(--product-surface, var(--interactive-surface));
+  box-shadow: var(--product-shadow-sm, none);
+}
+
+/* Notes take the full height of the right column; accords and "when to wear" stack on the left */
+.tall {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+/* Only one block (e.g. a perfume without notes) -> full row */
+.single {
+  grid-template-columns: 1fr;
+}
+
+.kicker {
+  margin: 0 0 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--product-muted, var(--text-muted));
+}
+
+/* ---------- Akordi ---------- */
+.accords {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.accords li {
+  display: grid;
+  grid-template-columns: minmax(96px, 120px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.accordName {
+  font-size: 14px;
+  font-weight: 650;
+  text-transform: lowercase;
+}
+
+.track {
+  height: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--product-fg, #fff) 8%, transparent);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left;
+  animation: grow 700ms cubic-bezier(0.22, 0.8, 0.24, 1) both;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- Piramida nota ---------- */
+.pyramid {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layer {
+  padding-left: 14px;
+  border-left: 2px solid color-mix(in srgb, var(--gold, #c7a567) 55%, transparent);
+}
+
+.layerHead {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.layerHead strong {
+  font-size: 15px;
+}
+
+.layerHead small {
+  color: var(--product-muted, var(--text-muted));
+  font-size: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  padding: 5px 11px;
+  border: 1px solid var(--product-border-soft, var(--interactive-border-soft));
+  border-radius: 999px;
+  background: var(--product-soft, transparent);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ---------- Kada nositi ---------- */
+.wearGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.wearItem {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 10px 6px;
+  border: 1px solid var(--product-border-soft, var(--interactive-border-soft));
+  border-radius: 14px;
+  color: var(--product-muted, var(--text-muted));
+}
+
+.wearStrong {
+  color: var(--product-fg, var(--foreground));
+  border-color: color-mix(in srgb, var(--gold, #c7a567) 45%, transparent);
+}
+
+.wearIcon {
+  font-size: 20px;
+}
+
+.wearStrong .wearIcon {
+  color: var(--gold, #c7a567);
+}
+
+.wearLabel {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.wearTrack {
+  width: 70%;
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--product-fg, #fff) 10%, transparent);
+  overflow: hidden;
+}
+
+.wearTrack span {
+  display: block;
+  height: 100%;
+  background: var(--gold, #c7a567);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .profile {
+    grid-template-columns: 1fr;
+  }
+
+  .tall {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .block {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+  }
+}

@@ -1,0 +1,47 @@
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.statusPill {
+  padding-inline: 16px;
+  min-height: 36px;
+  font-size: 13px;
+}
+
+.pending {
+  background: var(--accent-soft-bg);
+  color: var(--warning-fg);
+  border-color: var(--accent-soft-border);
+}
+
+.confirmed {
+  background: var(--info-bg);
+  color: var(--info-fg);
+  border-color: var(--info-border);
+}
+
+.shipped {
+  background: var(--info-bg);
+  color: var(--accent-soft-fg);
+  border-color: var(--info-border);
+}
+
+.received {
+  background: var(--success-bg);
+  color: var(--success-fg);
+  border-color: var(--success-border);
+}
+
+.cancelled {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  border-color: var(--danger-border);
+}

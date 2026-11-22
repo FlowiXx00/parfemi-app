@@ -1,0 +1,408 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* The card adapts to ITS OWN width (see @container at the bottom), e.g. 2 columns on a 320px phone */
+  container-type: inline-size;
+}
+
+/* --- Stage: wall + light beam + bottle + pedestal (the whole area is a button) --- */
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 18px 18px 6px 6px;
+  overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(180deg, var(--sr-wall-top) 0%, var(--sr-wall-bottom) 100%);
+  box-shadow: inset 0 1px 0 var(--sr-pedestal-edge), 0 18px 40px -24px var(--sr-shadow);
+  isolation: isolate;
+  transition: box-shadow 300ms ease;
+}
+
+.stage:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* Light beam from above (the lamp sits "above" the card) */
+/* The blur is on the wrapper and the beam shape on ::before -> soft light edges. */
+.beam {
+  position: absolute;
+  top: -8%;
+  left: 50%;
+  width: 96%;
+  height: 94%;
+  transform: translateX(-50%);
+  filter: blur(12px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 450ms ease;
+}
+
+/*
+ * The light is strong only at the top (hits the cap/shoulder) and fades before the label,
+ * so it's dark behind the bottle body and labels on light/clear bottles stay readable.
+ */
+.beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    var(--sr-beam-core) 0%,
+    var(--sr-beam) 18%,
+    color-mix(in srgb, var(--sr-beam) 35%, transparent) 38%,
+    transparent 56%
+  );
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+}
+
+/* Fixed niche height -> every card is the same height regardless of image proportions. */
+.niche {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.05;
+}
+
+.bottle {
+  position: absolute;
+  inset: 16% 16% 3%;
+  z-index: 1;
+  width: 68%;
+  height: 81%;
+  object-fit: contain;
+  object-position: center bottom;
+  /* A bit more contrast: photos shot for a white background look washed out on a dark stage. */
+  filter: drop-shadow(0 14px 14px var(--sr-shadow)) contrast(1.08) saturate(1.06);
+  animation: appear 600ms ease both;
+  transition: transform 500ms cubic-bezier(0.22, 0.8, 0.24, 1), filter 500ms ease;
+  user-select: none;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bottleEmpty {
+  position: absolute;
+  inset: 22% 20% 5%;
+}
+
+.bottlePlaceholder {
+  position: absolute;
+  left: 27%;
+  bottom: 3%;
+  width: 46%;
+  height: 78%;
+  border-radius: 14px 14px 8px 8px;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--sr-beam-core) 40%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  animation: shimmer 1.4s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+/* Light spot on the pedestal under the bottle */
+.floorGlow {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  width: 70%;
+  height: 12%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, var(--sr-floor-glow) 0%, transparent 70%);
+  opacity: 0.7;
+  transition: opacity 450ms ease;
+  pointer-events: none;
+}
+
+.pedestal {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 84%;
+}
+
+.pedestalTop {
+  height: 10px;
+  border-radius: 4px 4px 0 0;
+  background: var(--sr-pedestal-top);
+  box-shadow: inset 0 1px 0 var(--sr-pedestal-edge);
+}
+
+.pedestalFront {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: 8px 6px;
+  background: linear-gradient(
+    180deg,
+    var(--sr-pedestal-front) 0%,
+    color-mix(in srgb, var(--sr-pedestal-front) 80%, var(--sr-shadow)) 100%
+  );
+  border-top: 1px solid var(--sr-pedestal-edge);
+}
+
+.price {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--sr-price);
+  white-space: nowrap;
+}
+
+/* Hover / focus: the light gets brighter and the bottle lifts */
+.stage:hover .beam,
+.stage:focus-visible .beam {
+  opacity: 0.9;
+}
+
+.stage:hover .floorGlow,
+.stage:focus-visible .floorGlow {
+  opacity: 1;
+}
+
+.stage:hover .bottle,
+.stage:focus-visible .bottle {
+  transform: translateY(-6px) scale(1.03);
+  filter: drop-shadow(0 22px 18px var(--sr-shadow)) contrast(1.08) saturate(1.06);
+}
+
+.stage:hover {
+  box-shadow: inset 0 1px 0 var(--sr-pedestal-edge), 0 24px 48px -22px var(--sr-shadow);
+}
+
+/* --- Text below --- */
+/* Brend (mala verzalna slova) -> naziv -> koncentracija -> ocena */
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 6px 0;
+  min-width: 0;
+  text-align: center;
+}
+
+.brand {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  /* letter-spacing dodaje razmak i iza poslednjeg slova -> vizuelno centriranje */
+  padding-left: 0.22em;
+}
+
+.name {
+  margin-top: 5px;
+  max-width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--color-text);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 200ms ease;
+}
+
+.name:hover {
+  color: var(--color-gold);
+}
+
+.concentration {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Fragrantica rating (FragranticaRating component), just spacing inside the card */
+.rating {
+  margin-top: 8px;
+}
+
+/* --- Oznake --- */
+/* One row at the top left; the heart is on the right (34px + gap), so the row must not reach it. */
+.badges {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 9px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--color-gold);
+  color: #1b150e;
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.5);
+}
+
+.badge svg {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+/* Second badge: icon in a circle only (the text is in title / aria-label) */
+.badgeIcon {
+  justify-content: center;
+  width: 24px;
+  padding: 0;
+  pointer-events: auto;
+}
+
+/* Akcija: zlatna (podrazumevano) */
+.badgeSale {
+  background: var(--color-gold);
+  color: #1b150e;
+}
+
+/* Best seller: warm orange-red */
+.badgeHot {
+  background: linear-gradient(135deg, #f08a3e 0%, #d4472f 100%);
+  color: #fff;
+}
+
+/* Featured: dark with gold text and border */
+.badgeFeatured {
+  background: rgba(20, 17, 14, 0.85);
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold-border);
+}
+
+.badgeMuted {
+  background: rgba(60, 60, 64, 0.9);
+  color: #e8e6e2;
+}
+
+@media (max-width: 640px) {
+  .price {
+    font-size: 12px;
+  }
+
+  .name {
+    font-size: 15px;
+  }
+
+  .brand {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    padding-left: 0.16em;
+  }
+
+  .pedestalFront {
+    min-height: 38px;
+  }
+}
+
+/* Narrow card (small phones, 2 columns): compact badges, the rating may wrap to 2 lines */
+@container (max-width: 190px) {
+  .badges {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    gap: 4px;
+  }
+
+  .badge {
+    height: 20px;
+    padding: 0 7px;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Featured / Best seller: icon only (full label in title) */
+  .badgeWithIcon {
+    width: 20px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .badgeWithIcon .badgeLabel {
+    display: none;
+  }
+
+  .badge svg {
+    font-size: 11px;
+  }
+
+  .meta {
+    padding: 10px 2px 0;
+  }
+
+  .brand {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    padding-left: 0.12em;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .concentration {
+    font-size: 11px;
+  }
+
+  .price {
+    font-size: 11px;
+  }
+
+  .pedestalFront {
+    min-height: 34px;
+    padding: 6px 4px;
+  }
+}
+
+@media (hover: none) {
+  .beam {
+    opacity: 0.75;
+  }
+}

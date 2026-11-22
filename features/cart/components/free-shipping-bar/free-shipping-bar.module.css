@@ -1,0 +1,60 @@
+.bar {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--gold, #c7a567) 40%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--gold, #c7a567) 8%, transparent);
+}
+
+.compact {
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.compact .text {
+  font-size: 13px;
+}
+
+.icon {
+  flex: none;
+  font-size: 20px;
+  color: var(--gold, #c7a567);
+}
+
+.track {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+  overflow: hidden;
+}
+
+.track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gold, #c7a567);
+  transition: width 0.45s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.reached {
+  border-color: color-mix(in srgb, #3fa96b 45%, transparent);
+  background: color-mix(in srgb, #3fa96b 10%, transparent);
+}
+
+.reached .icon,
+.reached strong {
+  color: #4cc07e;
+}
+
+.reached .track span {
+  background: #4cc07e;
+}

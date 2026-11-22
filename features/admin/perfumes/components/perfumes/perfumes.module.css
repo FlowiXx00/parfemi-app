@@ -1,0 +1,848 @@
+/* ================= Okvir stranice ================= */
+.page {
+  color: var(--foreground);
+}
+
+.wrap {
+  width: 100%;
+}
+
+.shell {
+  min-width: 0;
+}
+
+.subtle {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.content {
+  min-width: 0;
+}
+
+.notice {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--soft-panel-border);
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.noticeSuccess {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-fg);
+}
+
+.noticeWarn {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning-fg);
+}
+
+.noticeError {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger-fg);
+}
+
+.loading {
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+}
+
+/* ================= List on the left + form on the right ================= */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.sidebar,
+.editorPanel {
+  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, #13161b 88%, transparent);
+}
+
+.sidebar {
+  position: sticky;
+  top: 20px;
+  overflow: hidden;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+.panelTitle {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.badge {
+  min-width: 28px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 16%, transparent);
+  color: var(--gold, #d2b070);
+  font-size: 12px;
+  font-weight: 850;
+  text-align: center;
+}
+
+.sidebarBody,
+.editorBody {
+  padding: 16px;
+}
+
+.editorBody {
+  display: grid;
+  gap: 14px;
+}
+
+.search {
+  width: 100%;
+}
+
+.list {
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
+  max-height: min(72dvh, 760px);
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.item:hover {
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+}
+
+.itemActive,
+.itemActive:hover {
+  border-color: color-mix(in srgb, var(--gold, #d2b070) 40%, transparent);
+  background: color-mix(in srgb, var(--gold, #d2b070) 8%, transparent);
+  box-shadow: inset 3px 0 0 var(--gold, #d2b070);
+}
+
+.itemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.itemTop .subtle {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.itemName {
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+/* Zalihe */
+.stockStatus {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+
+.stockValue {
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.stockVariants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stockOk,
+.stockOut {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stockOk {
+  background: color-mix(in srgb, #3fa96b 20%, transparent);
+  color: #4cc07e;
+}
+
+.stockOut {
+  background: color-mix(in srgb, var(--danger-bg) 50%, transparent);
+  color: var(--danger-fg);
+}
+
+.stockRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.stockRow .input {
+  flex: 0 1 140px;
+}
+
+/* Hidden from the shop: faded, dashed border */
+.itemHidden {
+  opacity: 0.62;
+  border-style: dashed;
+}
+
+.listFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.listFilter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--interactive-border);
+  border-radius: 999px;
+  background: var(--interactive-surface);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.listFilter span {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.listFilterActive {
+  background: color-mix(in srgb, var(--gold, #d2b070) 16%, transparent);
+  color: var(--gold, #d2b070);
+  border-color: color-mix(in srgb, var(--gold, #d2b070) 55%, transparent);
+}
+
+.listFilterActive span {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btnSmall {
+  min-height: 34px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.hiddenTag {
+  padding: 4px 10px;
+  border: 1px dashed var(--interactive-border-strong);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.itemMeta {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ================= Sekcije forme ================= */
+.card {
+  display: grid;
+  gap: 12px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--foreground) 2%, transparent);
+  padding: 18px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+/* Section number in the heading (1–6) */
+.step {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--gold, #d2b070) 16%, transparent);
+  color: var(--gold, #d2b070);
+  font-size: 12px;
+  font-weight: 900;
+  vertical-align: 2px;
+}
+
+/* Subgroup inside a section (accords, when to wear, color) */
+.subsection {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px dashed color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+/* The optional section (description) is collapsed */
+.optional summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.optional summary::-webkit-details-marker {
+  display: none;
+}
+
+.optional summary::after {
+  content: " ▸";
+  color: var(--text-muted);
+}
+
+.optional[open] summary::after {
+  content: " ▾";
+}
+
+/* ================= Polja ================= */
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.input,
+.select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 11px;
+  background: #0f1216;
+  color: var(--foreground);
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--gold, #d2b070) 70%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold, #d2b070) 18%, transparent);
+}
+
+.input:disabled,
+.select:disabled,
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: var(--soft-panel-bg);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.toggleRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Shop URL (ID): a small row below the basic details */
+.idRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.idInput {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13px;
+}
+
+/* ================= Dugmad ================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border-radius: 11px;
+  min-height: 40px;
+  padding: 0 16px;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  color: var(--foreground);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 750;
+  font-size: 14px;
+  transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
+.btnPrimary {
+  border-color: transparent;
+  background: var(--gold, #d2b070);
+  color: #17140e;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: var(--gold, #d2b070);
+  filter: brightness(1.06);
+}
+
+.btnDanger {
+  border-color: color-mix(in srgb, #e45f5f 40%, transparent);
+  background: color-mix(in srgb, #e45f5f 10%, transparent);
+  color: #ffb4b4;
+}
+
+.btnDanger:hover:not(:disabled) {
+  background: color-mix(in srgb, #e45f5f 18%, transparent);
+}
+
+.chipBtn {
+  padding: 6px 12px;
+  border: 1px dashed var(--interactive-border-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chipBtn:hover {
+  border-style: solid;
+  background: var(--interactive-surface-hover);
+}
+
+/* Save bar: always visible at the bottom of the form */
+.saveBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  border-radius: 0 0 18px 18px;
+  background: rgba(19, 22, 27, 0.94);
+  box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.saveBtn {
+  min-width: 200px;
+}
+
+/* ================= Slike ================= */
+.imageList {
+  display: grid;
+  gap: 10px;
+}
+
+.imageRow {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.imageThumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  border: 1px solid var(--soft-panel-border);
+  background: var(--surface-2, #f3f2ef);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.imageUrlCell {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.imageStatus {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.imageStatusOk {
+  color: #3fb37f;
+}
+
+.imageActions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.imageRow input[aria-invalid="true"] {
+  border-color: #c0392b;
+}
+
+/* ================= Miris ================= */
+.notesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.accordList {
+  display: grid;
+  gap: 8px;
+}
+
+.accordRow {
+  display: grid;
+  grid-template-columns: minmax(0, 180px) minmax(0, 1fr) 40px 46px;
+  align-items: center;
+  gap: 10px;
+}
+
+.rangeValue {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: right;
+}
+
+.wearGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 16px;
+}
+
+.wearItem {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 8px;
+}
+
+.accordRow input[type="range"],
+.wearItem input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-gold, #c7a567);
+}
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: 42px;
+}
+
+.colorInput {
+  width: 46px;
+  height: 38px;
+  padding: 2px;
+  border-radius: 10px;
+  border: 1px solid var(--soft-panel-border);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Fill from image (AI) */
+.scentAi {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px dashed var(--soft-panel-border);
+  border-radius: 14px;
+  outline: none;
+}
+
+.scentAi:focus-visible,
+.scentAi:focus-within {
+  border-color: var(--focus-border);
+}
+
+.scentAiRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scentAiThumb {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--soft-panel-border);
+}
+
+.scentAiThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scentAiThumb button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* ================= Cene ================= */
+.costGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+
+.costSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--interactive-surface) 60%, transparent);
+}
+
+.variantTable {
+  display: grid;
+  gap: 8px;
+}
+
+.variantRow {
+  display: grid;
+  grid-template-columns: 120px 140px minmax(70px, 1fr) minmax(70px, 1fr) 90px 46px;
+  gap: 10px;
+  align-items: center;
+}
+
+.variantHead {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.inputWithUnit {
+  position: relative;
+}
+
+.inputWithUnit .input {
+  padding-right: 34px;
+}
+
+.inputWithUnit span {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.profitOk {
+  color: #3fb37f;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.profitBad {
+  color: var(--danger-fg);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.quickMl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 1100px) {
+  .costGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .list {
+    max-height: 320px;
+  }
+}
+
+@media (max-width: 760px) {
+  .notesGrid,
+  .wearGrid,
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .costGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .accordRow {
+    grid-template-columns: minmax(0, 1fr) 90px 34px 46px;
+  }
+
+  /* Volumes: volume + price on the first row, cost/profit/stock below */
+  .variantRow {
+    grid-template-columns: 1fr 1fr 46px;
+  }
+
+  .variantHead {
+    display: none;
+  }
+
+  .variantRow > :nth-child(3),
+  .variantRow > :nth-child(4),
+  .variantRow > :nth-child(5) {
+    grid-column: span 1;
+  }
+
+  .imageRow {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .imageRow > :nth-child(3) {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar,
+  .panelHead {
+    padding: 14px;
+  }
+
+  .content,
+  .sidebarBody,
+  .editorBody {
+    padding: 12px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbarActions,
+  .topbarActions .btn {
+    width: 100%;
+  }
+
+  .saveBar .btn {
+    flex: 1;
+  }
+
+  .saveBtn {
+    min-width: 0;
+  }
+}

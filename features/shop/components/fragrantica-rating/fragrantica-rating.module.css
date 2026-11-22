@@ -1,0 +1,65 @@
+/* ---------- Compact (shop card) ---------- */
+.compact {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 2px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.star {
+  color: var(--color-gold);
+  font-size: 11px;
+}
+
+.value {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.muted {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+/* ---------- Full (quick view, product page) ---------- */
+.full {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bigValue {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.fullText {
+  display: grid;
+  gap: 3px;
+}
+
+.stars {
+  position: relative;
+  display: inline-block;
+  font-size: 15px;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.starsEmpty {
+  color: color-mix(in srgb, var(--color-text-muted) 35%, transparent);
+}
+
+.starsFull {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--color-gold);
+}

@@ -1,0 +1,990 @@
+/* ---------- Backdrop and dialog ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  background: var(--sr-overlay);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 300ms ease both;
+}
+
+.closing {
+  animation: fadeOut 260ms ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* The dialog is always vertically centered, so it doesn't move when switching perfumes. */
+.stack {
+  --dialog-h: min(800px, calc(100dvh - 32px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dialog {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: max(0px, calc((100dvh - 32px - var(--dialog-h)) / 2));
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  width: min(1040px, 100%);
+  height: var(--dialog-h);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--sr-pedestal-edge);
+  box-shadow: 0 40px 120px -30px var(--sr-shadow);
+  animation: rise 420ms cubic-bezier(0.22, 0.8, 0.24, 1) both;
+}
+
+.closing .dialog {
+  animation: sink 260ms ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sink {
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Scena ---------- */
+.scene {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 100%, transparent 0%, var(--sr-shadow) 140%),
+    linear-gradient(180deg, var(--sr-wall-top) 0%, var(--sr-wall-bottom) 100%);
+}
+
+/* Lampa na plafonu */
+.lamp {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 84px;
+  height: 18px;
+  transform: translateX(-50%);
+  border-radius: 0 0 40px 40px;
+  background: var(--sr-lamp);
+  box-shadow: 0 6px 18px -4px var(--sr-beam-core);
+  z-index: 2;
+}
+
+.lamp::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 18%;
+  right: 18%;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--sr-beam-core);
+  filter: blur(1px);
+  animation: lampOn 1100ms steps(1, end) both;
+}
+
+/* Light beam: switches on with a short flicker */
+.beam {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 78%;
+  height: 92%;
+  transform: translateX(-50%);
+  transform-origin: top center;
+  filter: blur(16px);
+  z-index: 0;
+  animation: beamOn 1100ms ease-out both;
+}
+
+/* The beam shape is on ::before so the wrapper blur gives soft edges. */
+.beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Strong light at the top, fading before the bottle body -> the label stays readable. */
+  background: linear-gradient(
+    180deg,
+    var(--sr-beam-core) 0%,
+    var(--sr-beam) 20%,
+    color-mix(in srgb, var(--sr-beam) 35%, transparent) 42%,
+    transparent 60%
+  );
+  clip-path: polygon(43% 0, 57% 0, 100% 100%, 0 100%);
+}
+
+@keyframes beamOn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scaleY(0.2);
+  }
+  12% {
+    opacity: 0.8;
+  }
+  18% {
+    opacity: 0.15;
+  }
+  28% {
+    opacity: 0.9;
+    transform: translateX(-50%) scaleY(1);
+  }
+  34% {
+    opacity: 0.35;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+@keyframes lampOn {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  18% {
+    opacity: 0.2;
+  }
+  28% {
+    opacity: 1;
+  }
+  34% {
+    opacity: 0.4;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Dust in the light */
+.dust {
+  position: absolute;
+  inset: 8% 18% 22%;
+  z-index: 1;
+  pointer-events: none;
+  animation: fadeIn 600ms ease 700ms both;
+}
+
+.dust span {
+  position: absolute;
+  top: 0;
+  border-radius: 999px;
+  background: var(--sr-dust);
+  box-shadow: 0 0 6px var(--sr-dust);
+  opacity: 0;
+  animation-name: float;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  15% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, 320px);
+  }
+}
+
+/* Bottle */
+.bottleWrap {
+  position: absolute;
+  left: 50%;
+  bottom: 21%;
+  width: 46%;
+  height: 58%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.bottleEmpty {
+  position: absolute;
+  inset: 8% 10% 0;
+}
+
+.bottle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 26px 22px var(--sr-shadow)) contrast(1.08) saturate(1.06);
+  animation:
+    zoomIn 700ms cubic-bezier(0.2, 0.9, 0.25, 1.1) 380ms both,
+    hover 5s ease-in-out 1.2s infinite;
+  user-select: none;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.72);
+    filter: drop-shadow(0 6px 6px var(--sr-shadow)) contrast(1.08) saturate(1.06) blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: drop-shadow(0 26px 22px var(--sr-shadow)) contrast(1.08) saturate(1.06) blur(0);
+  }
+}
+
+@keyframes hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.floorGlow {
+  position: absolute;
+  left: 50%;
+  bottom: 19%;
+  width: 58%;
+  height: 9%;
+  transform: translateX(-50%);
+  /* Warm, soft light spot on the pedestal (not a "plate") */
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--sr-floor-glow) 45%, transparent) 0%,
+    transparent 60%
+  );
+  filter: blur(12px);
+  opacity: 0.8;
+  z-index: 1;
+  animation: fadeIn 800ms ease 500ms both;
+}
+
+.pedestal {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 62%;
+  height: 21%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.pedestalTop {
+  height: 14px;
+  border-radius: 6px 6px 0 0;
+  background: var(--sr-pedestal-top);
+  box-shadow: inset 0 1px 0 var(--sr-pedestal-edge);
+}
+
+.pedestalFront {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--sr-price);
+  background: linear-gradient(
+    180deg,
+    var(--sr-pedestal-front) 0%,
+    color-mix(in srgb, var(--sr-pedestal-front) 75%, var(--sr-shadow)) 100%
+  );
+  border-top: 1px solid var(--sr-pedestal-edge);
+}
+
+/* ---------- Arrows and counter (over the stage) ---------- */
+.navBtn {
+  position: absolute;
+  top: 46%;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--sr-pedestal-edge);
+  background: color-mix(in srgb, var(--sr-wall-top) 70%, transparent);
+  color: var(--sr-on-dark);
+  font-size: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.navBtn:hover {
+  background: color-mix(in srgb, var(--sr-pedestal-top) 90%, transparent);
+  transform: scale(1.06);
+}
+
+.navBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.navPrev {
+  left: 14px;
+}
+
+/* Right edge of the stage: the stage takes 1.15 / 2.15 of the dialog width */
+.navNext {
+  left: calc(53.49% - 56px);
+}
+
+.counter {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 5;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--sr-on-dark) 60%, transparent);
+}
+
+/* ---------- Panel ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 28px 22px;
+  overflow-y: auto;
+  min-height: 0;
+  animation: panelIn 420ms ease 120ms both;
+  /* Panel layout adapts to the panel's WIDTH (see @container below) */
+  container-type: inline-size;
+}
+
+/* When height runs out the panel scrolls; sections are NEVER squeezed on top of each other */
+.panel > * {
+  flex-shrink: 0;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-right: 48px;
+}
+
+.headingText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.brand {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tagHot {
+  background: linear-gradient(135deg, #f08a3e 0%, #d4472f 100%);
+  color: #fff;
+}
+
+.tagFeatured {
+  background: var(--color-gold-soft);
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold-border);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(24px, 2.8vw, 30px);
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* Fragrantica rating below the concentration */
+.rating {
+  justify-self: start;
+  margin-top: 6px;
+}
+
+/* Heart: add to wishlist */
+.heartBtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-size: 19px;
+  cursor: pointer;
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+.heartBtn:hover {
+  transform: scale(1.08);
+}
+
+.heartBtnActive {
+  color: #e05a4a;
+}
+
+.heartBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ---------- Akordi + kada nositi ---------- */
+.scent {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-soft);
+}
+
+.accords {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.accords li {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.accordName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: lowercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accordTrack {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  overflow: hidden;
+}
+
+.accordBar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+  animation: grow 700ms cubic-bezier(0.22, 0.8, 0.24, 1) both;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.accords {
+  order: 1;
+}
+
+.wear {
+  order: 2;
+}
+
+/* Key notes: one full-width row below accords and seasons */
+.keyNotes {
+  order: 3;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.keyNote {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.keyNote small {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.keyNoteList,
+.keyNoteListOpen {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.keyNoteList {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Expanded: all notes of the layer, wrapping onto multiple lines */
+.keyNoteListOpen {
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.keyNoteMore {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.notesToggle {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-gold);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.notesToggle:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.wear {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 6px;
+}
+
+.wearItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 20px;
+  color: var(--color-text-muted);
+}
+
+.wearItem small {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.wearStrong {
+  color: var(--color-gold);
+}
+
+/* ---------- Zapremina + pipeta ---------- */
+/* Volumes aligned to the bottom, next to the vial (no empty band above) */
+.fillArea {
+  flex: 1 0 auto;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.options {
+  flex: 1;
+  align-self: center;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/*
+ * Volume buttons: a grid of EQUAL columns. All in one row while they fit (min 64px);
+ * when there are more than fit, they wrap evenly, never one stretched across the full width.
+ */
+.mlList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+  gap: 8px;
+}
+
+.mlBtn {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
+}
+
+.mlBtn strong {
+  font-size: 15px;
+  line-height: 1.1;
+}
+
+.mlBtn span {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  white-space: nowrap; /* "4.600 rsd" always on one line */
+}
+
+.mlBtn:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+.mlBtnActive {
+  border-color: var(--color-gold);
+  background: var(--color-gold-soft);
+  box-shadow: 0 0 0 1px var(--color-gold) inset;
+}
+
+.mlBtnActive span {
+  color: var(--color-text);
+}
+
+.mlBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mlBtn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* The vial grows to fill the free space in the panel */
+/* Stretches to the free height; the vial (SVG) scales and sits at the bottom */
+/* Fixed height (follows the viewport height within limits), independent of the rest of the panel */
+.vialWrap {
+  flex: none;
+  width: 150px;
+  height: clamp(190px, 25vh, 230px);
+}
+
+/* ---------- Narrow panel (e.g. tablet or a smaller laptop) ---------- */
+@container (max-width: 390px) {
+  .scent {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .wear {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* Narrow panel: slimmer pipette, three volumes still fit in one row */
+  .fillArea {
+    gap: 10px;
+  }
+
+  .mlList {
+    grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+    gap: 6px;
+  }
+
+  .mlBtn {
+    padding: 8px 2px;
+  }
+
+  .mlBtn strong {
+    font-size: 14px;
+  }
+
+  .mlBtn span {
+    font-size: 10px;
+  }
+
+  .vialWrap {
+    width: 92px;
+  }
+
+  .heading {
+    padding-right: 44px;
+  }
+}
+
+/* Very narrow panel (~320px phone): slimmer pipette, volume buttons get more room */
+@container (max-width: 330px) {
+  .vialWrap {
+    width: 76px;
+  }
+
+  .mlBtn strong {
+    font-size: 13px;
+  }
+
+  .total strong {
+    font-size: 20px;
+  }
+}
+
+/* ---------- Dno ---------- */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.total strong {
+  font-size: 24px;
+  color: var(--color-text);
+}
+
+.addBtn {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--color-gold) 70%, #000);
+  background: linear-gradient(135deg, #d6b675 0%, var(--color-gold) 55%, #b08d4f 100%);
+  color: #1b150e;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -12px var(--color-gold);
+  transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+}
+
+.addBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.addBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------- Telefon ---------- */
+@media (max-width: 760px) {
+  .backdrop {
+    padding: 0;
+  }
+
+  .stack {
+    gap: 0;
+    justify-content: flex-start;
+  }
+
+  .dialog {
+    grid-template-columns: 1fr;
+    grid-template-rows: 42dvh auto;
+    width: 100%;
+    margin-top: 0;
+    height: 100dvh;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  .navBtn {
+    top: calc(21dvh - 21px);
+  }
+
+  .navNext {
+    left: auto;
+    right: 14px;
+  }
+
+  .closeBtn {
+    top: 10px;
+    right: 10px;
+  }
+
+  .panel {
+    overflow: visible;
+    padding: 20px 16px 28px;
+  }
+
+  .heading {
+    padding-right: 0;
+  }
+
+  .scent {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .wear {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .fillArea {
+    flex: none;
+    min-height: 200px;
+  }
+
+  /* All volumes in one row */
+  .mlList {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .mlBtn {
+    min-width: 0;
+    padding: 9px 4px;
+  }
+
+  .mlBtn strong {
+    font-size: 14px;
+  }
+
+  .vialWrap {
+    width: 96px;
+    height: 200px;
+  }
+
+  .pedestalFront {
+    font-size: 15px;
+  }
+}

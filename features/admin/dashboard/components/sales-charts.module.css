@@ -1,0 +1,240 @@
+.figure {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.chart {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  height: 240px;
+  padding-bottom: 22px;
+}
+
+/* Axis labels sit exactly at the grid line heights */
+.axis {
+  position: relative;
+  min-width: 34px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.axis span {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  white-space: nowrap;
+}
+
+.plot {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 4px;
+  border-bottom: 1px solid var(--interactive-border-strong);
+}
+
+/* Recessive grid */
+.gridline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+  pointer-events: none;
+}
+
+.col {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  outline: none;
+  cursor: default;
+}
+
+/* Hit area = the whole column; the bar is thin, rounded only at the top (grows from zero) */
+.bar {
+  width: min(28px, 70%);
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: var(--gold, #c7a567);
+  transition: filter 0.15s ease;
+}
+
+.col:hover .bar,
+.col:focus-visible .bar {
+  filter: brightness(1.15);
+}
+
+.month {
+  position: absolute;
+  bottom: -20px;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* Tooltip above the top of the bar (not above the whole column) */
+.tip {
+  position: absolute;
+  bottom: calc(var(--bar-h, 0%) + 8px);
+  left: 50%;
+  z-index: 3;
+  display: none;
+  gap: 2px;
+  min-width: 170px;
+  padding: 10px 12px;
+  border: 1px solid var(--interactive-border-strong);
+  border-radius: 10px;
+  background: linear-gradient(var(--interactive-surface), var(--interactive-surface)), var(--background);
+  box-shadow: var(--interactive-shadow-lg, 0 12px 30px rgba(0, 0, 0, 0.35));
+  color: var(--foreground);
+  font-size: 12px;
+  line-height: 1.45;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.col:hover .tip,
+.col:focus-visible .tip {
+  display: grid;
+}
+
+/* tooltips on the first/last bars don't overflow the card */
+.col:first-child .tip,
+.col:nth-child(2) .tip {
+  left: 0;
+  transform: none;
+}
+
+.col:last-child .tip {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.table summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.table table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.table th,
+.table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--interactive-border);
+  text-align: right;
+}
+
+.table th:first-child,
+.table td:first-child {
+  text-align: left;
+}
+
+.table th {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.table small {
+  color: var(--text-muted);
+}
+
+/* ---------- Najprodavaniji ---------- */
+.top {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.top li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1.2fr) minmax(60px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.rank {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.topName {
+  display: grid;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.topName small {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.topTrack {
+  height: 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+  overflow: hidden;
+}
+
+.topTrack span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--gold, #c7a567);
+}
+
+.topValue {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .month {
+    font-size: 9px;
+  }
+
+  .col:nth-child(odd) .month {
+    visibility: hidden;
+  }
+
+  .top li {
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+  }
+
+  .topTrack {
+    display: none;
+  }
+}

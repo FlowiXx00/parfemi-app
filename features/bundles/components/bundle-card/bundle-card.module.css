@@ -1,0 +1,190 @@
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid var(--interactive-border);
+  border-radius: 22px;
+  background: var(--interactive-surface);
+  box-shadow: var(--interactive-shadow-md, none);
+}
+
+.unavailable {
+  opacity: 0.7;
+}
+
+/* Bottles in a row on a "shelf", lit like a display window; all the same height (processed images without background) */
+.bottles {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  height: 200px;
+  padding: 22px 18px 18px;
+  background:
+    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--gold, #c7a567) 22%, transparent), transparent 70%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 4%, transparent), transparent);
+}
+
+/* shelf under the bottles */
+.bottles::after {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 14px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.45), transparent 70%);
+}
+
+.bottle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 0 1 64px;
+  height: 128px;
+  min-width: 0;
+}
+
+.bottle img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.35));
+  animation: appear 380ms ease both;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--gold, #c7a567);
+  color: #1a1610;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px 20px;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold, #c7a567);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(20px, 2.2vw, 24px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.desc {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.items {
+  display: grid;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.items a {
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.items a span {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.items a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--interactive-border);
+}
+
+.price {
+  display: grid;
+  gap: 2px;
+}
+
+.price s {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.price strong {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.price small {
+  color: #4cc07e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.addBtn {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--button-primary-border);
+  border-radius: 999px;
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.addBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.addBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

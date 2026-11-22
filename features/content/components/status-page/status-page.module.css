@@ -1,0 +1,171 @@
+.page {
+  display: grid;
+  place-items: center;
+  min-height: calc(100dvh - var(--header-offset-desktop, 110px) - 120px);
+  padding: 48px var(--page-inline, 16px) 72px;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  width: min(640px, 100%);
+  padding: clamp(32px, 6vw, 56px) clamp(20px, 5vw, 48px);
+  border: 1px solid var(--interactive-border-soft, rgba(255, 255, 255, 0.08));
+  border-radius: var(--card-radius-lg, 22px);
+  background:
+    radial-gradient(420px 220px at 50% 0%, color-mix(in srgb, var(--gold, #d2b070) 16%, transparent), transparent 72%),
+    var(--surface, #15181d);
+  box-shadow: var(--interactive-shadow-lg, 0 20px 50px rgba(0, 0, 0, 0.32));
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Big number (404 / 500) with a gold gradient, like the lettering on a bottle */
+.code {
+  font-size: clamp(84px, 16vw, 132px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  background: linear-gradient(180deg, #f0d9a6 0%, var(--gold, #d2b070) 45%, #8a6a35 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.kicker {
+  margin-top: 6px;
+  color: var(--gold, #d2b070);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.text {
+  max-width: 460px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.footer {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ---------- Parts used by the pages ---------- */
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.primary {
+  border: 1px solid var(--button-primary-border);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+}
+
+.secondary {
+  border: 1px solid var(--interactive-border);
+  background: transparent;
+  color: var(--foreground);
+}
+
+.primary:hover,
+.secondary:hover {
+  transform: translateY(-1px);
+}
+
+.secondary:hover {
+  border-color: color-mix(in srgb, var(--gold, #d2b070) 60%, transparent);
+}
+
+/* 404 search works without JavaScript (plain form to /shop?q=) */
+.search {
+  display: flex;
+  gap: 8px;
+  width: min(440px, 100%);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--interactive-border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+.search input:focus {
+  border-color: color-mix(in srgb, var(--gold, #d2b070) 70%, transparent);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.links a {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.links a:hover {
+  color: var(--gold, #d2b070);
+}
+
+@media (max-width: 480px) {
+  .search {
+    flex-direction: column;
+  }
+
+  .primary,
+  .secondary {
+    flex: 1 1 100%;
+  }
+}
