@@ -1,4 +1,5 @@
 import InfoPage from "@/features/content/components/info-page/info-page";
+import { COMPANY } from "@/lib/company";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -18,7 +19,7 @@ export default function ContactPage() {
         {
           title: "Kako da nas kontaktiraš",
           body: [
-            "Najbrži način za pitanja u vezi sa porudžbinama je email na info@atelierdekant.rs. Za hitne upite u vezi sa isporukom možeš nas pozvati na +381 62 803 0775.",
+            `Najbrži način za pitanja u vezi sa porudžbinama je email na ${COMPANY.email}. Za hitne upite u vezi sa isporukom možeš nas pozvati na ${COMPANY.phone}.`,
             "Kada nas kontaktiraš povodom postojeće porudžbine, pošalji broj porudžbine i email koji si koristio pri kupovini kako bismo ti brže pomogli.",
           ],
         },

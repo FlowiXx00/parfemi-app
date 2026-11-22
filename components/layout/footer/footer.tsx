@@ -223,13 +223,13 @@ export default function Footer() {
               <div className={styles.title}>Kontakt</div>
               <ul className={styles.links}>
                 <li>
-                  <a href="tel:+381628030775">
-                    <FiPhone aria-hidden="true" /> +381 62 803 0775
+                  <a href={`tel:${COMPANY.phone.replace(/[^\d+]/g, "")}`}>
+                    <FiPhone aria-hidden="true" /> {COMPANY.phone}
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:info@atelierdekant.rs">
-                    <FiMail aria-hidden="true" /> info@atelierdekant.rs
+                  <a href={`mailto:${COMPANY.email}`}>
+                    <FiMail aria-hidden="true" /> {COMPANY.email}
                   </a>
                 </li>
                 <li>

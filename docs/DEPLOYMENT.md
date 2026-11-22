@@ -47,7 +47,7 @@ Register the demo user through the site, then assign the `demo` role:
 
 ```sql
 insert into public.user_roles (user_id, role_id)
-select id, 3 from auth.users where email = 'demo@atelierdekant.rs';
+select id, 3 from auth.users where email = 'demo@example.com';
 ```
 
 The admin then shows a "demo" banner, masks customer data and rejects every change.

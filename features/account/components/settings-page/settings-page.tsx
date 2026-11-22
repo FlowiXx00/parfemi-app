@@ -24,6 +24,7 @@ import {
   translateAuthError,
 } from "@/lib/password";
 import { dispatchAuthProfileUpdated } from "@/features/auth/client/profile-sync";
+import { COMPANY } from "@/lib/company";
 import styles from "./settings-page.module.css";
 
 type ProfileForm = {
@@ -1099,7 +1100,7 @@ export default function SettingsPage() {
             </div>
 
             <div className={styles.dangerActions}>
-              <a href="mailto:info@atelierdekant.rs" className={styles.dangerBtn}>
+              <a href={`mailto:${COMPANY.email}`} className={styles.dangerBtn}>
                 Kontaktiraj podršku
               </a>
             </div>

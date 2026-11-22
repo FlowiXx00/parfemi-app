@@ -2,7 +2,7 @@
 
 **A full-stack e-commerce store for perfume decants** — customers buy small samples (3–20 ml) of designer and niche fragrances before committing to a full bottle. 1,200+ products, a custom admin panel, and Serbian instant payments (NBS IPS QR).
 
-**Live:** [atelierdekant.rs](https://atelierdekant.rs) · **Demo admin:** see [Try the admin panel](#try-the-admin-panel)
+**Live:** [atelier-dekant.vercel.app](https://atelier-dekant.vercel.app) · **Demo admin:** see [Try the admin panel](#try-the-admin-panel)
 
 ![Home page](docs/screenshots/home.jpg)
 
@@ -123,8 +123,8 @@ Optional features turn on when their variables are set (see [`.env.example`](.en
 
 A read-only demo account shows the full admin panel. Everything works for browsing; any change is rejected by the server, and customer names, phone numbers, emails and addresses are masked.
 
-- URL: `https://atelierdekant.rs/admin`
-- Email: `demo@atelierdekant.rs`
+- URL: [atelier-dekant.vercel.app/admin](https://atelier-dekant.vercel.app/admin)
+- Email: *available on request*
 - Password: *available on request*
 
 ## Tests
