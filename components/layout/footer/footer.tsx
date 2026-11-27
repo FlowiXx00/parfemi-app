@@ -24,7 +24,14 @@ import {
 } from "react-icons/fi";
 import styles from "./footer.module.css";
 import { analyticsEnabled, reopenCookieBanner } from "@/features/analytics/components/analytics";
-import { COMPANY, sellerLine } from "@/lib/company";
+import { COMPANY, sellerLine, SOCIAL_LINKS } from "@/lib/company";
+import { PiFacebookLogo, PiInstagramLogo, PiTiktokLogo } from "react-icons/pi";
+
+const SOCIAL_ICONS: Record<string, typeof PiInstagramLogo> = {
+  instagram: PiInstagramLogo,
+  tiktok: PiTiktokLogo,
+  facebook: PiFacebookLogo,
+};
 
 import { useCartState } from "@/features/cart/client/use-cart-state";
 import {
@@ -36,6 +43,7 @@ import { useAuthUser } from "@/features/auth/client/use-auth-user";
 
 const shopLinks = [
   { label: "Svi parfemi", href: "/shop" },
+  { label: "Brendovi", href: "/brendovi" },
   { label: "Paketi za probu", href: "/paketi" },
   { label: "Pronađi svoj miris", href: "/kviz" },
   { label: "Lista želja", href: "/wishlist" },
@@ -238,6 +246,26 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
+              {SOCIAL_LINKS.length > 0 && (
+                <div className={styles.social} aria-label="Društvene mreže">
+                  {SOCIAL_LINKS.map((link) => {
+                    const Icon = SOCIAL_ICONS[link.key] ?? PiInstagramLogo;
+                    return (
+                      <a
+                        key={link.key}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer me"
+                        className={styles.socialLink}
+                        aria-label={`Atelier Dekant na mreži ${link.label}`}
+                        title={link.label}
+                      >
+                        <Icon aria-hidden="true" />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>

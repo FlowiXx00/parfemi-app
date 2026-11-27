@@ -9,7 +9,7 @@
  */
 import { createHash } from "node:crypto";
 import { supabaseAdmin } from "@/db/clients/admin";
-import { isStoredImage, PERFUME_IMAGES_BUCKET } from "@/features/shop/lib/product-images";
+import { isStoredImage, PERFUME_IMAGES_BUCKET, perfumeStorageFolder } from "@/features/shop/lib/product-images";
 import type { ProductImage } from "@/features/shop/types";
 import { ImportError, safeFetch } from "./safe-fetch";
 
@@ -36,9 +36,7 @@ function sniffImageType(bytes: Uint8Array): string | null {
   return null;
 }
 
-function safeFolder(perfumeId: string) {
-  return perfumeId.replace(/[^a-z0-9-]/gi, "").slice(0, 80) || "ostalo";
-}
+const safeFolder = perfumeStorageFolder;
 
 /** Downloads one image from a link and stores it in the bucket; returns our public URL. */
 async function storeImageFromUrl(perfumeId: string, sourceUrl: string): Promise<string> {

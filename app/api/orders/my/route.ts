@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/db/clients/server";
 import { supabaseAdmin } from "@/db/clients/admin";
 import { listOrdersByUser } from "@/db/queries/orders";
+import { claimGuestOrdersFor } from "@/features/account/server/claim-guest-orders";
 
 export async function GET() {
   try {
@@ -19,6 +20,9 @@ export async function GET() {
         { status: 401 }
       );
     }
+
+    // Earlier orders placed without an account (same confirmed email) show up here too.
+    await claimGuestOrdersFor(user);
 
     const { data, error } = await listOrdersByUser(supabaseAdmin, user.id);
 

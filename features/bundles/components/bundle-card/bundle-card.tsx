@@ -39,7 +39,7 @@ export default function BundleCard({ bundle }: { bundle: BundleView }) {
     <article className={`${styles.card} ${bundle.available ? "" : styles.unavailable}`}>
       <div className={styles.bottles} aria-hidden="true">
         {bundle.items.slice(0, 5).map((item) => (
-          <BottleImg key={item.id} src={item.image} className={styles.bottle} />
+          <BottleImg key={item.id} src={item.image} precomputed={item.cutout} className={styles.bottle} />
         ))}
         {bundle.discountPct > 0 && <span className={styles.badge}>−{bundle.discountPct}%</span>}
       </div>

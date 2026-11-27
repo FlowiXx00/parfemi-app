@@ -1,5 +1,6 @@
 import "server-only";
 import { getSiteUrl } from "@/lib/site";
+import { trackingLinkHasNumber, trackingUrl } from "@/features/orders/lib/tracking";
 import { sendEmail } from "./email";
 
 /** Order data needed for the email. */
@@ -19,15 +20,24 @@ export type OrderEmailData = {
   items: { name: string; ml: number; qty: number; lineTotalRsd: number }[];
   /** Bank transfer details (only when IPS payment is configured) */
   payment?: { account: string; payeeName: string; reference: string | null } | null;
+  /** Post Express shipment number (shipping email) */
+  trackingNumber?: string | null;
 };
 
-const escapeHtml = (value: string) =>
+export const escapeHtml = (value: string) =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 const rsd = (value: number) => `${Math.round(value).toLocaleString("sr-RS")} rsd`;
 
+/** Gold button for emails (tables, so Outlook draws it too). */
+export function emailButton(href: string, label: string) {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:18px 0 0"><tr><td style="background:#15151a;border-radius:10px">
+<a href="${href}" style="display:inline-block;padding:12px 22px;color:#f5f2ec;font-size:14px;font-weight:bold;text-decoration:none">${escapeHtml(label)}</a>
+</td></tr></table>`;
+}
+
 /** Shared email layout (tables + inline styles, so it looks the same in Gmail, Outlook…). */
-function layout(title: string, intro: string, body: string) {
+export function layout(title: string, intro: string, body: string) {
   const site = getSiteUrl();
   return `<!doctype html><html lang="sr"><body style="margin:0;background:#f4f2ee;font-family:Arial,Helvetica,sans-serif;color:#1d1b18">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f2ee;padding:24px 12px">
@@ -134,7 +144,7 @@ const STATUS_COPY: Record<string, { subject: string; title: string; text: string
   shipped: {
     subject: "Porudžbina #{n} je poslata 🚚",
     title: "Paket je na putu!",
-    text: "Predali smo paket kurirskoj službi (Post-express). Obično stiže za 1–3 radna dana. Kad ga preuzmeš, potvrdi prijem na stranici Porudžbine.",
+    text: "Predali smo paket kurirskoj službi (Post-express). Obično stiže za 1–3 radna dana.",
   },
   cancelled: {
     subject: "Porudžbina #{n} je otkazana",
@@ -142,6 +152,18 @@ const STATUS_COPY: Record<string, { subject: string; title: string; text: string
     text: "Tvoja porudžbina je otkazana. Ako misliš da je u pitanju greška ili imaš pitanja, samo odgovori na ovaj mejl.",
   },
 };
+
+/** Shipment number + where to track it (shipping email). */
+function trackingBlock(order: OrderEmailData) {
+  if (!order.trackingNumber) return "";
+  const href = trackingUrl(order.trackingNumber);
+  const how = trackingLinkHasNumber()
+    ? ""
+    : `<br><span style="color:#7a756d;font-size:13px">Na stranici Pošte unesi ovaj broj i klikni „Pratite”.</span>`;
+  return `<p style="margin:0 0 18px;padding:14px;border:1px solid #e7d9b9;background:#fbf7ee;border-radius:10px;font-size:14px;line-height:1.6">
+<strong>Broj pošiljke:</strong> <span style="font-family:monospace;font-size:15px;letter-spacing:.04em">${escapeHtml(order.trackingNumber)}</span>
+<br><a href="${href}" style="color:#a8853f">Prati pošiljku na sajtu Pošte →</a>${how}</p>`;
+}
 
 /** Status change (confirmed / shipped / cancelled) -> email to the customer. */
 export async function sendOrderStatusEmail(order: OrderEmailData, status: string) {
@@ -156,7 +178,7 @@ export async function sendOrderStatusEmail(order: OrderEmailData, status: string
     html: layout(
       copy.title,
       `Porudžbina <strong>#${escapeHtml(order.orderNumber)}</strong>: ${copy.text} <a href="${site}/orders" style="color:#a8853f">Pogledaj porudžbinu →</a>`,
-      itemsTable(order)
+      (status === "shipped" ? trackingBlock(order) : "") + itemsTable(order)
     ),
   });
 }

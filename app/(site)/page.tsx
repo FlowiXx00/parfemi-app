@@ -8,6 +8,7 @@ import { getBundleViews } from "@/features/bundles/lib/views";
 import type { CatalogProduct } from "@/features/shop/types";
 import { getSiteUrl } from "@/lib/site";
 import { pageMetadata } from "@/lib/seo";
+import { SOCIAL_LINKS } from "@/lib/company";
 
 export const metadata = pageMetadata({
   title: "Dekanti originalnih parfema",
@@ -60,6 +61,7 @@ function siteJsonLd() {
         name: "Atelier Dekant",
         url: siteUrl,
         logo: `${siteUrl}/images/logo-white.png`,
+        ...(SOCIAL_LINKS.length ? { sameAs: SOCIAL_LINKS.map((link) => link.url) } : {}),
       },
       {
         "@type": "WebSite",

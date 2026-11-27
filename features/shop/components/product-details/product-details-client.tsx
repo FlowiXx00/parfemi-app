@@ -9,6 +9,12 @@ import SearchParamsSync from "@/features/shop/components/search-params-sync/sear
 import FragranticaRating from "@/features/shop/components/fragrantica-rating/fragrantica-rating";
 import type { CatalogProduct, Product } from "@/features/shop/types";
 import SimilarPerfumes from "@/features/shop/components/similar-perfumes/similar-perfumes";
+import ProductReviews from "@/features/reviews/components/product-reviews/product-reviews";
+import ReviewsBadge from "@/features/reviews/components/reviews-badge/reviews-badge";
+import StockAlertButton from "@/features/stock-alerts/components/stock-alert-button/stock-alert-button";
+import RecentlyViewed from "@/features/shop/components/recently-viewed/recently-viewed";
+import { brandHref } from "@/features/shop/lib/brands";
+import { EMPTY_PRODUCT_REVIEWS, type ProductReviews as ProductReviewsData } from "@/features/reviews/lib/reviews";
 import { addToCartAnimated } from "@/features/cart/lib/add-to-cart-animated";
 import styles from "./product-details.module.css";
 import ScentProfile, { hasScentProfile } from "./scent-profile";
@@ -18,6 +24,7 @@ import { sanitizeRichText } from "@/lib/rich-text";
 import { formatRsd, getPriceBounds } from "@/lib/format";
 import { FiHeart } from "react-icons/fi";
 import {
+  canOptimizeImage,
   getPrimaryImage,
   PRODUCT_IMAGE_FALLBACK,
 } from "@/features/shop/lib/product-images";
@@ -28,7 +35,15 @@ import {
   removeFromWishlist,
 } from "@/features/wishlist/client/wishlist.api";
 
-export default function DetailsClient({ product, similar = [] }: { product: Product; similar?: CatalogProduct[] }) {
+export default function DetailsClient({
+  product,
+  similar = [],
+  reviews = EMPTY_PRODUCT_REVIEWS,
+}: {
+  product: Product;
+  similar?: CatalogProduct[];
+  reviews?: ProductReviewsData;
+}) {
   const router = useRouter();
   // ?ml=10 from the URL (filled in by SearchParamsSync in the browser so the page stays static HTML).
   const [mlFromUrl, setMlFromUrl] = useState("");
@@ -38,7 +53,7 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
     setMlFromUrl(params.get("ml") ?? "");
     setSelectedMl("");
   }, []);
-  const { isLoggedIn } = useSessionUser();
+  const { isLoggedIn, ready: sessionReady } = useSessionUser();
   const hasProfile = hasScentProfile(product.accords, product.notes, product.wear);
   const shopSettings = useShopSettings();
 
@@ -301,7 +316,7 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
         <div className={styles.breadcrumbs}>
           <Link href="/shop">Shop</Link>
           <span>/</span>
-          <Link href={`/shop?q=${encodeURIComponent(product.brand)}`}>{product.brand}</Link>
+          <Link href={brandHref(product.brand)}>{product.brand}</Link>
           <span>/</span>
           <span className={styles.breadcrumbCurrent}>{product.name}</span>
         </div>
@@ -321,6 +336,7 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
               >
                 <Image
                   src={item.src}
+                  unoptimized={!canOptimizeImage(item.src)}
                   alt={`${product.name} - ${item.label}`}
                   width={96}
                   height={96}
@@ -359,6 +375,7 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
               <Image
                 ref={mainImageRef}
                 src={activeItem.src}
+                unoptimized={!canOptimizeImage(activeItem.src)}
                 alt={`${product.name} - ${activeItem.label}`}
                 width={900}
                 height={900}
@@ -401,6 +418,7 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
               </span>
 
               <FragranticaRating rating={product.rating} votes={product.votes} variant="full" />
+              <ReviewsBadge summary={reviews.summary} />
 
               <div className={styles.priceBlock}>
                 <div className={styles.priceMain}>
@@ -440,6 +458,13 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
                     );
                   })}
                 </div>
+
+                <StockAlertButton
+                  productId={product.id}
+                  variants={product.variants}
+                  isLoggedIn={isLoggedIn}
+                  sessionReady={sessionReady}
+                />
               </div>
 
               <div className={styles.purchaseRow}>
@@ -593,7 +618,11 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
           )}
         </section>
 
+        <ProductReviews productId={product.id} productName={product.name} initial={reviews} />
+
         <SimilarPerfumes productName={product.name} products={similar} />
+
+        <RecentlyViewed currentId={product.id} />
       </main>
 
       {lightboxOpen && (
@@ -623,6 +652,7 @@ export default function DetailsClient({ product, similar = [] }: { product: Prod
 
             <Image
               src={activeItem.src}
+              unoptimized={!canOptimizeImage(activeItem.src)}
               alt={`${product.name} - ${activeItem.label}`}
               width={1200}
               height={1200}

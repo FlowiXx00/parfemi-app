@@ -30,6 +30,7 @@ import {
   getCouponDiscount,
   normalizeCouponCode,
 } from "@/features/orders/lib/coupons";
+import { canOptimizeImage } from "@/features/shop/lib/product-images";
 import { stripBrandPrefix } from "@/features/shop/lib/product-name";
 import { formatRsd } from "@/lib/format";
 
@@ -462,6 +463,7 @@ export default function CartPageClient() {
                           <Image
                             className={styles.thumb}
                             src={item.imageUrl}
+                            unoptimized={!canOptimizeImage(item.imageUrl)}
                             alt={item.name}
                             width={96}
                             height={96}

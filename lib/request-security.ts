@@ -35,7 +35,7 @@ function cleanupExpiredEntries(now: number) {
   }
 }
 
-function getClientIp(request: NextRequest) {
+export function getClientIp(request: NextRequest) {
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
     const first = forwardedFor.split(",")[0]?.trim();

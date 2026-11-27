@@ -4,7 +4,6 @@ import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
 import NextImage from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  FiBell,
   FiCheckCircle,
   FiEye,
   FiEyeOff,
@@ -25,6 +24,7 @@ import {
 } from "@/lib/password";
 import { dispatchAuthProfileUpdated } from "@/features/auth/client/profile-sync";
 import { COMPANY } from "@/lib/company";
+import NotificationSettings from "@/features/account/components/notification-settings/notification-settings";
 import styles from "./settings-page.module.css";
 
 type ProfileForm = {
@@ -37,12 +37,6 @@ type PasswordForm = {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
-};
-
-type PreferencesForm = {
-  orderEmails: boolean;
-  promoEmails: boolean;
-  wishlistBackInStock: boolean;
 };
 
 type AuthUser = {
@@ -77,15 +71,8 @@ type ProfileRow = {
 
 type SupabaseBrowserClient = NonNullable<ReturnType<typeof createClient>>;
 
-const PREFERENCES_STORAGE_KEY = "atelier-dekant:account-preferences";
 const MAX_AVATAR_FILE_SIZE = 5 * 1024 * 1024;
 const AVATAR_OUTPUT_SIZE = 256;
-
-const defaultPreferences: PreferencesForm = {
-  orderEmails: true,
-  promoEmails: false,
-  wishlistBackInStock: true,
-};
 
 function getDisplayName(user: AuthUser | null, profile?: ProfileRow | null) {
   const profileName = profile?.full_name?.trim();
@@ -220,15 +207,10 @@ export default function SettingsPage() {
     confirmPassword: "",
   });
 
-  const [preferences, setPreferences] = useState<PreferencesForm>(
-    defaultPreferences
-  );
-
   // Nothing to load without Supabase configured.
   const [loadingProfile, setLoadingProfile] = useState(() => supabase !== null);
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
-  const [savingPrefs, setSavingPrefs] = useState(false);
 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -236,10 +218,8 @@ export default function SettingsPage() {
 
   const [profileSaved, setProfileSaved] = useState(false);
   const [passwordSaved, setPasswordSaved] = useState(false);
-  const [prefsSaved, setPrefsSaved] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
-  const [prefsMessage, setPrefsMessage] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarInputKey, setAvatarInputKey] = useState(0);
@@ -266,7 +246,6 @@ export default function SettingsPage() {
     let active = true;
 
     async function syncUser(user: AuthUser | null) {
-      const parsedPrefs = readPreferencesFromStorage();
       const profileRow = user?.id ? await loadProfileRow(client, user.id) : null;
 
       if (!active) return;
@@ -279,7 +258,6 @@ export default function SettingsPage() {
         phone: user?.user_metadata?.phone?.trim() ?? "",
       });
       setAvatarUrl(profileRow?.avatar_url?.trim() ?? null);
-      setPreferences(parsedPrefs);
       setLoadingProfile(false);
     }
 
@@ -582,24 +560,6 @@ export default function SettingsPage() {
       );
     } finally {
       setSavingPassword(false);
-    }
-  }
-
-  function handlePreferencesSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    try {
-      setSavingPrefs(true);
-      window.localStorage.setItem(
-        PREFERENCES_STORAGE_KEY,
-        JSON.stringify(preferences)
-      );
-      flashSaved(setPrefsSaved);
-      setPrefsMessage("Podešavanja su sačuvana lokalno na ovom uređaju.");
-    } catch {
-      setPrefsMessage("Nismo uspeli da sačuvamo podešavanja obaveštenja.");
-    } finally {
-      setSavingPrefs(false);
     }
   }
 
@@ -975,80 +935,7 @@ export default function SettingsPage() {
             </form>
           </section>
 
-          <section className={styles.card}>
-            <div className={styles.cardHeader}>
-              <div className={styles.cardIcon}>
-                <FiBell />
-              </div>
-
-              <div>
-                <div className={styles.cardKicker}>Obaveštenja</div>
-                <h2 className={styles.cardTitle}>Obaveštenja na ovom uređaju</h2>
-                <p className={styles.cardText}>
-                  Ova podešavanja trenutno služe kao lokalna preferenca u pregledaču dok se ne povežu sa backend obaveštenjima.
-                </p>
-              </div>
-            </div>
-
-            <form className={styles.form} onSubmit={handlePreferencesSubmit}>
-              <div className={styles.preferenceList}>
-                <PreferenceRow
-                  title="Obaveštenja o porudžbini"
-                  text="Potvrda porudžbine i osnovna statusna obaveštenja."
-                  checked={preferences.orderEmails}
-                  onChange={(checked) =>
-                    setPreferences((prev) => ({
-                      ...prev,
-                      orderEmails: checked,
-                    }))
-                  }
-                />
-
-                <PreferenceRow
-                  title="Promotivne poruke"
-                  text="Povremene novosti, akcije i obaveštenja o novim parfemima."
-                  checked={preferences.promoEmails}
-                  onChange={(checked) =>
-                    setPreferences((prev) => ({
-                      ...prev,
-                      promoEmails: checked,
-                    }))
-                  }
-                />
-
-                <PreferenceRow
-                  title="Wishlist i dostupnost"
-                  text="Podsetnik kada se vrati proizvod koji te zanima."
-                  checked={preferences.wishlistBackInStock}
-                  onChange={(checked) =>
-                    setPreferences((prev) => ({
-                      ...prev,
-                      wishlistBackInStock: checked,
-                    }))
-                  }
-                />
-              </div>
-
-              {prefsMessage && <div className={styles.helperText}>{prefsMessage}</div>}
-
-              <div className={styles.actions}>
-                {prefsSaved && (
-                  <div className={styles.successInline}>
-                    <FiCheckCircle />
-                    <span>Lokalna podešavanja su sačuvana.</span>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  className={styles.primaryBtn}
-                  disabled={savingPrefs}
-                >
-                  {savingPrefs ? "Čuvanje..." : "Sačuvaj podešavanja"}
-                </button>
-              </div>
-            </form>
-          </section>
+          <NotificationSettings userId={currentUserId} />
 
           <section className={styles.card}>
             <div className={styles.cardHeader}>
@@ -1142,63 +1029,5 @@ export default function SettingsPage() {
         </div>
       ) : null}
     </main>
-  );
-}
-
-function readPreferencesFromStorage(): PreferencesForm {
-  if (typeof window === "undefined") {
-    return defaultPreferences;
-  }
-
-  try {
-    const raw = window.localStorage.getItem(PREFERENCES_STORAGE_KEY);
-    if (!raw) return defaultPreferences;
-
-    const parsed = JSON.parse(raw) as Partial<PreferencesForm>;
-
-    return {
-      orderEmails:
-        typeof parsed.orderEmails === "boolean"
-          ? parsed.orderEmails
-          : defaultPreferences.orderEmails,
-      promoEmails:
-        typeof parsed.promoEmails === "boolean"
-          ? parsed.promoEmails
-          : defaultPreferences.promoEmails,
-      wishlistBackInStock:
-        typeof parsed.wishlistBackInStock === "boolean"
-          ? parsed.wishlistBackInStock
-          : defaultPreferences.wishlistBackInStock,
-    };
-  } catch {
-    return defaultPreferences;
-  }
-}
-
-function PreferenceRow({
-  title,
-  text,
-  checked,
-  onChange,
-}: {
-  title: string;
-  text: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}) {
-  return (
-    <label className={styles.preferenceRow}>
-      <div>
-        <div className={styles.preferenceTitle}>{title}</div>
-        <div className={styles.preferenceText}>{text}</div>
-      </div>
-
-      <input
-        className={styles.switch}
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-    </label>
   );
 }

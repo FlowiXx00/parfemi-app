@@ -8,6 +8,7 @@ import CartMlPicker from "@/features/cart/components/cart-ml-picker/cart-ml-pick
 import FreeShippingBar from "@/features/cart/components/free-shipping-bar/free-shipping-bar";
 import BundleContents, { BundleThumbBadge, CartThumbFallback, isBundleItem } from "@/features/cart/components/bundle-contents/bundle-contents";
 import type { CartItem } from "@/features/cart/types";
+import { canOptimizeImage } from "@/features/shop/lib/product-images";
 import { stripBrandPrefix } from "@/features/shop/lib/product-name";
 import { formatRsd } from "@/lib/format";
 
@@ -93,6 +94,7 @@ export default function CartDrawer({
                       <Image
                         className={styles.thumbImg}
                         src={it.imageUrl}
+                        unoptimized={!canOptimizeImage(it.imageUrl)}
                         alt=""
                         width={64}
                         height={64}

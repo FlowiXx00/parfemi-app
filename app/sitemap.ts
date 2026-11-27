@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getSiteUrl } from "@/lib/site";
 import { getProducts } from "@/db/queries/perfumes";
+import { groupByBrand } from "@/features/shop/lib/brands";
 
 const siteUrl = getSiteUrl();
 
@@ -11,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [
     "",
     "/shop",
+    "/brendovi",
     "/paketi",
     "/kviz",
     "/about",
@@ -40,7 +42,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...staticEntries, ...productEntries];
+    const brandEntries: MetadataRoute.Sitemap = groupByBrand(products).map((brand) => ({
+      url: `${siteUrl}/brendovi/${brand.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    }));
+
+    return [...staticEntries, ...brandEntries, ...productEntries];
   } catch {
     return staticEntries;
   }

@@ -1,8 +1,9 @@
 /**
- * Table: shop_settings (single row, id = 1). Readable by everyone (cached), editable by admins only.
+ * Table: shop_settings (single row, id = 1). Read by the server only (service role, cached; shown on the
+ * site), changed by admins through the admin API.
  */
 import { revalidateTag, unstable_cache } from "next/cache";
-import { publicClient } from "@/db/clients/public";
+import { supabaseAdmin } from "@/db/clients/admin";
 import type { Db } from "@/db/types";
 import { DEFAULT_SHOP_SETTINGS, type ShopSettings } from "@/features/orders/lib/shipping";
 
@@ -21,7 +22,7 @@ function mapSettings(row: SettingsRow | null): ShopSettings {
 /** Shop settings (5 min cache, refreshed right after an admin change). */
 export const getShopSettings = unstable_cache(
   async (): Promise<ShopSettings> => {
-    const { data, error } = await publicClient
+    const { data, error } = await supabaseAdmin
       .from("shop_settings")
       .select("shipping_rsd, free_shipping_from_rsd")
       .eq("id", 1)

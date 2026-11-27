@@ -988,3 +988,8 @@
     font-size: 15px;
   }
 }
+
+/* Notes are loaded when the quick view opens: a quiet placeholder meanwhile */
+.keyNoteLoading {
+  opacity: 0.45;
+}

@@ -1,0 +1,239 @@
+.form {
+  display: grid;
+  gap: 16px;
+  padding: clamp(16px, 2.4vw, 22px);
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--gold) 6%, var(--interactive-surface));
+  box-shadow:
+    var(--interactive-shadow-sm),
+    var(--interactive-highlight);
+  scroll-margin-top: calc(var(--header-offset-desktop) + 12px);
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+/* ---------- Stars (radio buttons drawn as stars) ---------- */
+.ratingField {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.ratingField legend {
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.starPicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+}
+
+.starOption {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: color-mix(in srgb, var(--text-muted) 40%, transparent);
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.starOption:hover {
+  transform: scale(1.08);
+}
+
+.starOptionActive {
+  color: var(--gold);
+}
+
+.starGlyph {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.radio {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radio:focus-visible + .starGlyph {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.ratingWord {
+  margin-left: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- Fields ---------- */
+.field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.select,
+.textarea {
+  width: 100%;
+  border: 1px solid var(--interactive-border);
+  border-radius: 14px;
+  background: var(--input-bg);
+  color: var(--input-fg);
+  font: inherit;
+  font-size: 15px;
+}
+
+.select {
+  min-height: 46px;
+  padding: 0 12px;
+}
+
+.textarea {
+  min-height: 132px;
+  padding: 12px 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.select:focus,
+.textarea:focus {
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  outline: none;
+}
+
+.counter {
+  justify-self: end;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mlNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.publishNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.publishNote strong {
+  color: var(--foreground);
+}
+
+.error {
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--color-danger-border);
+  border-radius: 12px;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- Buttons ---------- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.submit,
+.cancel {
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.submit {
+  border: 1px solid var(--button-primary-border);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+}
+
+.submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--button-primary-bg-hover);
+  border-color: var(--button-primary-border-hover);
+}
+
+.cancel {
+  border: 1px solid var(--interactive-border);
+  background: var(--interactive-surface);
+  color: var(--foreground);
+}
+
+.cancel:hover:not(:disabled) {
+  border-color: var(--interactive-border-hover);
+}
+
+.submit:disabled,
+.cancel:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .form {
+    scroll-margin-top: calc(var(--header-offset-mobile) + 12px);
+  }
+
+  .submit,
+  .cancel {
+    flex: 1 1 140px;
+  }
+}

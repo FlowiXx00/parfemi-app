@@ -7,28 +7,37 @@ import {
   type ChatMessage,
 } from "@/features/chat/server/shop-assistant";
 import { protectMutationRoute } from "@/lib/request-security";
+import { hitSharedLimit, protectWithSharedLimit } from "@/lib/shared-rate-limit";
 
 export const maxDuration = 60;
 
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_LENGTH = 800;
+const PER_VISITOR_LIMIT = 20; // messages per visitor per 10 minutes
+const PER_VISITOR_WINDOW_SECONDS = 10 * 60;
 
-/**
- * Site-wide daily limit (protects the API account from abuse): CHAT_DAILY_LIMIT, 1000 messages by
- * default.
- * Counted per server process.
- */
+/** Fallback when the shared counter isn't available (before migration 017): counted per server process. */
 const daily = { day: "", count: 0 };
-function underDailyLimit() {
+function underLocalDailyLimit(limit: number) {
   const today = new Date().toISOString().slice(0, 10);
   if (daily.day !== today) {
     daily.day = today;
     daily.count = 0;
   }
-  const limit = Number(process.env.CHAT_DAILY_LIMIT) || 1000;
   if (daily.count >= limit) return false;
   daily.count++;
   return true;
+}
+
+/**
+ * Site-wide daily limit (protects the API account from abuse): CHAT_DAILY_LIMIT, 1000 messages by
+ * default. Counted in Supabase, so it holds across all server instances and restarts.
+ */
+async function underDailyLimit() {
+  const limit = Number(process.env.CHAT_DAILY_LIMIT) || 1000;
+  const today = new Date().toISOString().slice(0, 10);
+  const shared = await hitSharedLimit(`chat:day:${today}`, limit, 24 * 60 * 60);
+  return shared ?? underLocalDailyLimit(limit);
 }
 
 /** Whether the assistant is enabled (the chat button only shows if it is). */
@@ -38,12 +47,20 @@ export async function GET() {
 
 /** Conversation messages -> streamed reply (NDJSON: one JSON event per line). */
 export async function POST(req: NextRequest) {
+  // Same origin + a quick per-process limit first, then the shared per-visitor limit.
   const protection = protectMutationRoute(req, {
     key: "shop-chat",
-    limit: 20, // messages per visitor per 10 minutes
-    windowMs: 10 * 60_000,
+    limit: PER_VISITOR_LIMIT,
+    windowMs: PER_VISITOR_WINDOW_SECONDS * 1000,
   });
   if (protection) return protection;
+
+  const sharedProtection = await protectWithSharedLimit(req, {
+    key: "chat:visitor",
+    limit: PER_VISITOR_LIMIT,
+    windowSeconds: PER_VISITOR_WINDOW_SECONDS,
+  });
+  if (sharedProtection) return sharedProtection;
 
   if (!isChatEnabled()) {
     return NextResponse.json({ error: "Savetnik trenutno nije dostupan." }, { status: 503 });
@@ -72,7 +89,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Napiši pitanje." }, { status: 400 });
   }
 
-  if (!underDailyLimit()) {
+  if (!(await underDailyLimit())) {
     return NextResponse.json(
       { error: "Savetnik je danas imao puno pitanja — probaj sutra ili nam piši preko stranice Kontakt." },
       { status: 429 }

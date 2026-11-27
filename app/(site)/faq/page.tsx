@@ -26,6 +26,8 @@ export default function FaqPage() {
           title: "Kako mogu da proverim status porudžbine?",
           body: [
             "Ako imaš nalog, sve svoje porudžbine vidiš na stranici Porudžbine. Ako kupuješ kao gost, status možeš proveriti unosom broja porudžbine i email adrese korišćene pri kupovini.",
+            "Kad je paket poslat, na stranici Porudžbine i u mejlu dobijaš broj pošiljke za praćenje na sajtu Pošte.",
+            "Kupovao/la si kao gost? Napravi nalog sa istom email adresom: ranije porudžbine se same povezuju sa nalogom i možeš da oceniš kupljene parfeme.",
             "Status porudžbine se ažurira kada je potvrđena, poslata ili uspešno preuzeta."
           ],
         },

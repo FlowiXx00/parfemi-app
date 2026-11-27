@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PiCopy, PiEnvelopeSimple, PiMagnifyingGlass, PiPhone, PiX } from "react-icons/pi";
+import { PiCheckCircle, PiCopy, PiEnvelopeSimple, PiMagnifyingGlass, PiPhone, PiTruck, PiX } from "react-icons/pi";
 import AdminPageHeader from "@/features/admin/ui/admin-page-header";
 import StatusBadge from "@/features/admin/ui/status-badge";
 import ui from "@/features/admin/ui/admin-ui.module.css";
+import { normalizeTrackingNumber, trackingUrl } from "@/features/orders/lib/tracking";
 import { formatDate, formatRsd } from "../../lib/orders.lib";
 import type { AdminOrderNextStatus, OrderRow, OrderStatus } from "../../types";
-import { AdminOrdersApiError, loadOrders, updateOrderStatusRequest } from "../../client/orders.api";
+import { AdminOrdersApiError, loadOrders, updateOrderRequest, type OrderUpdatePatch } from "../../client/orders.api";
 import styles from "./orders.module.css";
 
 type Tab = "all" | OrderStatus;
@@ -26,13 +27,15 @@ const TABS: { key: Tab; label: string }[] = [
 const NEXT_STEP: Partial<Record<OrderStatus, { status: AdminOrderNextStatus; label: string }>> = {
   pending: { status: "confirmed", label: "Potvrdi" },
   confirmed: { status: "shipped", label: "Označi kao poslato" },
+  shipped: { status: "received", label: "Označi kao isporučeno" },
 };
 
 const STATUS_HELP: Record<OrderStatus, string> = {
   pending: "Nova porudžbina — proveri dostupnost i potvrdi je.",
-  confirmed: "Potvrđena — pripremi dekante i pošalji.",
-  shipped: "Poslata — čeka da kupac potvrdi prijem.",
-  received: "Kupac je potvrdio da je preuzeo pošiljku.",
+  confirmed: "Potvrđena — pripremi dekante, upiši broj pošiljke i označi kao poslato.",
+  shipped:
+    "Poslata — kad Post Express potvrdi isporuku ili uplati pouzeće, označi kao isporučeno (ili kupac sam potvrdi prijem).",
+  received: "Isporučena — kupac sada može da oceni parfeme; za par dana dobija mejl sa molbom za recenziju.",
   cancelled: "Otkazana — ml su vraćeni na zalihe (ako se prate).",
 };
 
@@ -46,6 +49,8 @@ export default function AdminOrdersPage() {
   const [busyId, setBusyId] = useState<number | null>(null);
   const [openId, setOpenId] = useState<number | null>(null);
   const [copied, setCopied] = useState("");
+  // Shipment number being typed in the details (per order, so switching orders doesn't mix them up).
+  const [trackingDraft, setTrackingDraft] = useState<{ id: number; value: string } | null>(null);
 
   const handleApiError = useCallback(
     (err: unknown) => {
@@ -98,19 +103,50 @@ export default function AdminOrdersPage() {
   const visible = useMemo(() => (tab === "all" ? orders : orders.filter((order) => order.status === tab)), [orders, tab]);
   const opened = orders.find((order) => order.id === openId) ?? null;
 
-  async function updateStatus(order: OrderRow, next: AdminOrderNextStatus) {
-    if (next === "cancelled" && !confirm(`Otkazati porudžbinu #${order.order_number}? Kupac dobija mejl (ako je podešen).`)) return;
+  /** Draft of the shipment number for this order (what's typed, or what's saved). */
+  function trackingValue(order: OrderRow) {
+    return trackingDraft?.id === order.id ? trackingDraft.value : (order.tracking_number ?? "");
+  }
+
+  async function save(order: OrderRow, patch: OrderUpdatePatch) {
     setBusyId(order.id);
     try {
-      await updateOrderStatusRequest(order.id, next);
+      await updateOrderRequest(order.id, patch);
       await refresh();
-      router.refresh(); // refresh the pending-orders count in the sidebar
+      if (patch.trackingNumber !== undefined) setTrackingDraft(null);
+      if (patch.status) router.refresh(); // refresh the pending-orders count in the sidebar
     } catch (err) {
       if (handleApiError(err)) return;
-      alert((err as Error).message || "Greška pri promeni statusa.");
+      alert((err as Error).message || "Greška pri čuvanju.");
     } finally {
       setBusyId(null);
     }
+  }
+
+  async function updateStatus(order: OrderRow, next: AdminOrderNextStatus) {
+    if (next === "cancelled" && !confirm(`Otkazati porudžbinu #${order.order_number}? Kupac dobija mejl (ako je podešen).`)) return;
+    if (next === "received" && !confirm(`Označiti porudžbinu #${order.order_number} kao isporučenu? Kupac tada može da oceni parfeme.`)) return;
+
+    // A shipment number typed but not saved yet goes along with "shipped", so it's in the email.
+    const typed = trackingValue(order).trim();
+    const patch: OrderUpdatePatch = { status: next };
+    if (next === "shipped" && typed && typed !== (order.tracking_number ?? "")) {
+      if (!normalizeTrackingNumber(typed)) {
+        alert("Broj pošiljke može imati samo slova, brojeve i crtice (4–40 znakova).");
+        return;
+      }
+      patch.trackingNumber = typed;
+    }
+    await save(order, patch);
+  }
+
+  async function saveTracking(order: OrderRow) {
+    const typed = trackingValue(order).trim();
+    if (typed && !normalizeTrackingNumber(typed)) {
+      alert("Broj pošiljke može imati samo slova, brojeve i crtice (4–40 znakova).");
+      return;
+    }
+    await save(order, { trackingNumber: typed });
   }
 
   async function copy(text: string, what: string) {
@@ -197,6 +233,7 @@ export default function AdminOrdersPage() {
                     </td>
                     <td data-label="Iznos" className={styles.num}>
                       <strong>{formatRsd(order.total_rsd)}</strong>
+                      {order.paid_at && <small className={styles.paidTag}>plaćeno</small>}
                     </td>
                     <td data-label="Status">
                       <StatusBadge status={order.status} />
@@ -271,6 +308,70 @@ export default function AdminOrdersPage() {
                   </button>
                 </div>
                 {opened.customer_note?.trim() && <p className={styles.note}>„{opened.customer_note}”</p>}
+                <p className={styles.sub}>
+                  {opened.user_id ? "Kupac ima nalog na sajtu." : "Poručeno bez naloga (gost)."}
+                </p>
+              </section>
+
+              <section className={styles.block}>
+                <h3>Dostava i uplata</h3>
+
+                {opened.status !== "pending" && opened.status !== "cancelled" && (
+                  <div className={styles.trackingRow}>
+                    <label className={ui.field}>
+                      <span className={ui.fieldLabel}>Broj pošiljke (Post Express)</span>
+                      <input
+                        className={ui.input}
+                        value={trackingValue(opened)}
+                        onChange={(event) => setTrackingDraft({ id: opened.id, value: event.target.value })}
+                        placeholder="npr. PE123456789RS"
+                        autoComplete="off"
+                        spellCheck={false}
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      className={ui.btn}
+                      disabled={busyId === opened.id || trackingValue(opened).trim() === (opened.tracking_number ?? "")}
+                      onClick={() => void saveTracking(opened)}
+                    >
+                      Sačuvaj
+                    </button>
+                  </div>
+                )}
+                {opened.status === "confirmed" && (
+                  <p className={styles.hintText}>
+                    Upiši broj pre nego što označiš kao poslato — kupac ga dobija u mejlu i vidi na stranici Porudžbine.
+                  </p>
+                )}
+                {opened.tracking_number && (
+                  <p className={styles.trackingLink}>
+                    <PiTruck aria-hidden="true" />
+                    <a href={trackingUrl(opened.tracking_number)} target="_blank" rel="noreferrer">
+                      Prati {opened.tracking_number} na sajtu Pošte
+                    </a>
+                  </p>
+                )}
+
+                <div className={styles.paidRow}>
+                  {opened.paid_at ? (
+                    <span className={styles.paidYes}>
+                      <PiCheckCircle aria-hidden="true" /> Plaćeno {formatDate(opened.paid_at)}
+                    </span>
+                  ) : (
+                    <span className={styles.sub}>Uplata još nije evidentirana.</span>
+                  )}
+                  {opened.status !== "cancelled" && (
+                    <button
+                      type="button"
+                      className={ui.btn}
+                      disabled={busyId === opened.id}
+                      onClick={() => void save(opened, { paid: !opened.paid_at })}
+                    >
+                      {opened.paid_at ? "Poništi uplatu" : "Označi kao plaćeno"}
+                    </button>
+                  )}
+                </div>
               </section>
 
               <section className={styles.block}>

@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { protectMutationRoute } from "@/lib/request-security";
+import { refreshPerfumeCutout } from "@/features/admin/perfumes/server/cutout";
+import { notifyBackInStock } from "@/features/stock-alerts/server/notify";
 import { supabaseAdmin } from "@/db/clients/admin";
 import {
   deleteVariantsByPerfumeId,
@@ -271,6 +273,14 @@ export async function POST(req: NextRequest) {
 
     // Shop, product page, search and sitemap see the change right away.
     revalidateCatalog();
+
+    // After the response: process the bottle image once on the server (if the main image changed) and
+    // email customers waiting for a volume that is now available.
+    after(async () => {
+      const cutout = await refreshPerfumeCutout(id);
+      if (cutout !== "skipped") revalidateCatalog();
+      await notifyBackInStock([id]);
+    });
 
     return NextResponse.json({
       ok: true,

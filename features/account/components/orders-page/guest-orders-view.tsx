@@ -12,6 +12,7 @@ import {
 } from "@/features/orders/lib/order-status";
 import { formatDateTime as formatDate, formatRsd } from "@/lib/format";
 import { readJsonSafe } from "@/lib/http";
+import TrackingInfo from "@/features/orders/components/tracking-info/tracking-info";
 
 type GuestOrderItem = {
   id: string;
@@ -27,6 +28,8 @@ type GuestOrder = {
   status: OrderStatus;
   createdAt: string;
   totalRsd: number;
+  trackingNumber: string | null;
+  paidAt: string | null;
   items: GuestOrderItem[];
 };
 
@@ -44,6 +47,8 @@ type ApiGuestOrderRow = {
   status: OrderStatus;
   created_at: string;
   total_rsd: number | string;
+  tracking_number?: string | null;
+  paid_at?: string | null;
   order_items?: ApiGuestOrderItemRow[] | null;
 };
 
@@ -82,6 +87,8 @@ function mapGuestOrderRow(row: ApiGuestOrderRow): GuestOrder {
     status: row.status,
     createdAt: row.created_at,
     totalRsd: Number(row.total_rsd ?? 0),
+    trackingNumber: row.tracking_number ?? null,
+    paidAt: row.paid_at ?? null,
     items: (row.order_items ?? []).map((item) => ({
       id: String(item.id),
       perfumeName: item.perfume_name,
@@ -276,8 +283,22 @@ export default function GuestOrdersView() {
                   <div className={styles.currentTotal}>
                     {formatRsd(foundOrder.totalRsd)}
                   </div>
+                  {foundOrder.paidAt && (
+                    <div className={styles.currentDate}>Uplata primljena · {formatDate(foundOrder.paidAt)}</div>
+                  )}
                 </div>
               </div>
+
+              {foundOrder.trackingNumber && (foundOrder.status === "shipped" || foundOrder.status === "received") && (
+                <div className={styles.guestTracking}>
+                  <TrackingInfo trackingNumber={foundOrder.trackingNumber} />
+                </div>
+              )}
+
+              <p className={styles.guestAccountHint}>
+                Napravi nalog sa istom email adresom i ova porudžbina će se sama pojaviti u tvom nalogu, uz
+                mogućnost da oceniš parfeme.
+              </p>
             </article>
           ) : null}
         </section>

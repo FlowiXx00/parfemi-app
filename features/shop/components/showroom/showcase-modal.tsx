@@ -18,9 +18,13 @@ import {
 } from "react-icons/pi";
 import { addToCartAnimated } from "@/features/cart/lib/add-to-cart-animated";
 import { useBottleImage } from "@/features/shop/client/use-bottle-image";
+import { useProductDetails } from "@/features/shop/client/product-details.api";
+import { cutoutFor } from "@/features/shop/lib/cutout";
 import { getPrimaryImage, PRODUCT_IMAGE_FALLBACK } from "@/features/shop/lib/product-images";
-import { accordColor, DAY_NIGHT, SEASONS, type WearKey } from "@/features/shop/lib/scent";
-import type { Product } from "@/features/shop/types";
+import { accordColor, DAY_NIGHT, SEASONS, type Notes, type WearKey } from "@/features/shop/lib/scent";
+import type { ShopProduct } from "@/features/shop/types";
+
+const EMPTY_NOTES: Notes = { top: [], middle: [], base: [] };
 import { useWishlistToggle } from "@/features/wishlist/client/use-wishlist-toggle";
 import { trackViewItem } from "@/features/analytics/client/track";
 import { formatRsd, getPriceBounds } from "@/lib/format";
@@ -69,7 +73,7 @@ export default function ShowcaseModal({
   onClose,
   wishlist,
 }: {
-  products: Product[];
+  products: ShopProduct[];
   productId: string;
   returnFocusTo: HTMLElement | null;
   onNavigate: (productId: string) => void;
@@ -174,11 +178,16 @@ function ShowcaseStage({
   wishlist,
   onAdded,
 }: {
-  product: Product;
+  product: ShopProduct;
   wishlist: WishlistProps;
   onAdded: () => void;
 }) {
-  const bottle = useBottleImage(getPrimaryImage(product), 828);
+  const [cutoutBroken, setCutoutBroken] = useState(false);
+  const precomputed = cutoutBroken ? null : cutoutFor(product, 828);
+  const bottle = useBottleImage(getPrimaryImage(product), 828, true, precomputed);
+  // Notes aren't in the light catalog: loaded for this perfume when the quick view opens.
+  const { details, loading: detailsLoading } = useProductDetails(product.id);
+  const notes = details?.notes ?? EMPTY_NOTES;
 
   // Analytics: perfume viewed in the quick view (the stage is recreated for each perfume).
   useEffect(() => {
@@ -257,9 +266,9 @@ function ShowcaseStage({
 
   // One main note from each layer (the full pyramid is on the product page).
   const keyNotes = [
-    { label: "Otvaranje", list: product.notes.top },
-    { label: "Srce", list: product.notes.middle },
-    { label: "Baza", list: product.notes.base },
+    { label: "Otvaranje", list: notes.top },
+    { label: "Srce", list: notes.middle },
+    { label: "Baza", list: notes.base },
   ]
     .filter((layer) => layer.list.length > 0);
   const hiddenNotes = keyNotes.reduce((sum, layer) => sum + Math.max(0, layer.list.length - 1), 0);
@@ -290,7 +299,14 @@ function ShowcaseStage({
             <EmptyBottle className={styles.bottleEmpty} />
           ) : bottle.ready && bottle.src ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={bottle.src} alt="" className={styles.bottle} draggable={false} />
+            <img
+              src={bottle.src}
+              alt=""
+              className={styles.bottle}
+              draggable={false}
+              decoding="async"
+              onError={() => precomputed && setCutoutBroken(true)}
+            />
           ) : null}
         </span>
 
@@ -346,7 +362,7 @@ function ShowcaseStage({
           </button>
         </div>
 
-        {(accords.length > 0 || hasWear || keyNotes.length > 0) && (
+        {(accords.length > 0 || hasWear || keyNotes.length > 0 || detailsLoading) && (
           <div className={styles.scent}>
             {accords.length > 0 && (
               <ul className={styles.accords} aria-label="Glavni akordi">
@@ -366,6 +382,17 @@ function ShowcaseStage({
                   </li>
                 ))}
               </ul>
+            )}
+
+            {detailsLoading && keyNotes.length === 0 && (
+              <div className={styles.keyNotes} aria-hidden="true">
+                {["Otvaranje", "Srce", "Baza"].map((label) => (
+                  <span key={label} className={`${styles.keyNote} ${styles.keyNoteLoading}`}>
+                    <small>{label}</small>
+                    <span className={styles.keyNoteList}>…</span>
+                  </span>
+                ))}
+              </div>
             )}
 
             {keyNotes.length > 0 && (

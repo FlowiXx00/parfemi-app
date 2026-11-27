@@ -1,8 +1,9 @@
 /**
- * Table: bundles (discovery bundles). Customers see only active ones (RLS), admins see all.
+ * Table: bundles (discovery bundles). Read by the server only (service role, migration 018):
+ * customers see the active ones, the admin sees all.
  */
 import { unstable_cache } from "next/cache";
-import { publicClient } from "@/db/clients/public";
+import { supabaseAdmin } from "@/db/clients/admin";
 import type { Db } from "@/db/types";
 import type { BundleRow } from "@/features/bundles/lib/bundles";
 
@@ -11,7 +12,7 @@ const BUNDLE_SELECT = "id, title, description, ml, discount_pct, perfume_ids, is
 /** Active bundles (cached together with the catalog, same "catalog" tag). */
 export const getActiveBundles = unstable_cache(
   async (): Promise<BundleRow[]> => {
-    const { data, error } = await publicClient
+    const { data, error } = await supabaseAdmin
       .from("bundles")
       .select(BUNDLE_SELECT)
       .eq("is_active", true)

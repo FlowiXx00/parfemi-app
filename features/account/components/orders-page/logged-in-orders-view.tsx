@@ -1,6 +1,8 @@
 "use client";
 
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import TrackingInfo from "@/features/orders/components/tracking-info/tracking-info";
 import {
   FiBox,
   FiCheckCircle,
@@ -42,6 +44,8 @@ type Order = {
   subtotalRsd: number;
   shippingRsd: number;
   totalRsd: number;
+  trackingNumber: string | null;
+  paidAt: string | null;
   items: OrderItem[];
 };
 
@@ -66,6 +70,8 @@ type ApiOrderRow = {
   subtotal_rsd: number | string;
   shipping_rsd: number | string;
   total_rsd: number | string;
+  tracking_number?: string | null;
+  paid_at?: string | null;
   order_items?: ApiOrderItemRow[] | null;
 };
 
@@ -182,6 +188,8 @@ function mapOrderRow(row: ApiOrderRow): Order {
     subtotalRsd: Number(row.subtotal_rsd ?? 0),
     shippingRsd: Number(row.shipping_rsd ?? 0),
     totalRsd: Number(row.total_rsd ?? 0),
+    trackingNumber: row.tracking_number ?? null,
+    paidAt: row.paid_at ?? null,
     items: (row.order_items ?? []).map((item) => ({
       id: String(item.id),
       perfumeId: item.perfume_id,
@@ -720,6 +728,14 @@ export default function LoggedInOrdersView() {
                                 <div className={styles.itemMeta}>
                                   {item.ml}ml · Količina: {item.qty}
                                 </div>
+                                {order.status === "received" && (
+                                  <Link
+                                    href={`/shop/${encodeURIComponent(item.perfumeId)}#recenzije`}
+                                    className={styles.reviewLink}
+                                  >
+                                    <span aria-hidden="true">★</span> Oceni parfem
+                                  </Link>
+                                )}
                               </div>
 
                               <div className={styles.itemPrice}>
@@ -731,6 +747,11 @@ export default function LoggedInOrdersView() {
 
                         <div className={styles.detailsFooter}>
                           <div className={styles.noteBlock}>
+                            {order.trackingNumber && (order.status === "shipped" || order.status === "received") && (
+                              <div className={styles.trackingWrap}>
+                                <TrackingInfo trackingNumber={order.trackingNumber} />
+                              </div>
+                            )}
                             <div className={styles.noteTitle}>Napomena</div>
                             <div className={styles.noteText}>
                               {order.customerNote || "Nema dodatne napomene."}
@@ -752,6 +773,12 @@ export default function LoggedInOrdersView() {
                               <span>Ukupno</span>
                               <span>{formatRsd(order.totalRsd)}</span>
                             </div>
+
+                            {order.paidAt && (
+                              <div className={styles.paidInfo}>
+                                Uplata primljena · {formatDate(order.paidAt)}
+                              </div>
+                            )}
 
                             {order.status === "received" && (
                               <div className={styles.receivedInfo}>

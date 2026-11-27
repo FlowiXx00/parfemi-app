@@ -14,6 +14,11 @@ export function getPrimaryImage(product: { images: ProductImage[] }) {
 /** Supabase Storage bucket where copies of perfume images are kept. */
 export const PERFUME_IMAGES_BUCKET = "perfume-images";
 
+/** Folder of one perfume's files in the bucket (its ID, limited to safe characters). */
+export function perfumeStorageFolder(perfumeId: string) {
+  return perfumeId.replace(/[^a-z0-9-]/gi, "").slice(0, 80) || "ostalo";
+}
+
 /**
  * The image is already ours (our Storage or /public) -> doesn't depend on another site.
  * Works in the browser and on the server (NEXT_PUBLIC_ variables are available everywhere).
@@ -22,6 +27,14 @@ export function isStoredImage(url: string) {
   if (url.startsWith("/") && !url.startsWith("//")) return true;
   const base = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").replace(/\/+$/, "");
   return Boolean(base) && url.startsWith(`${base}/storage/v1/object/public/${PERFUME_IMAGES_BUCKET}/`);
+}
+
+/**
+ * next/image optimizes only our own images (next.config.ts remotePatterns); an image still on another
+ * site (couldn't be copied on save) is shown as is, with `unoptimized`.
+ */
+export function canOptimizeImage(url: string) {
+  return isStoredImage(url);
 }
 
 /** Allowed image URL: https://… or a local path starting with "/". */

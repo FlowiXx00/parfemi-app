@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import { protectMutationRoute } from "@/lib/request-security";
+import { notifyBackInStock } from "@/features/stock-alerts/server/notify";
 import { supabaseAdmin } from "@/db/clients/admin";
 import { revalidateCatalog } from "@/db/queries/perfumes";
 import { addStock, setStock, stopTrackingStock } from "@/db/queries/stock";
@@ -57,5 +58,7 @@ export async function POST(req: NextRequest) {
 
   // The shop shows (un)available volumes right away.
   revalidateCatalog();
+  // A top-up can make volumes available again: email customers who asked to be told.
+  after(() => notifyBackInStock([id]));
   return NextResponse.json({ ok: true, stockMl });
 }

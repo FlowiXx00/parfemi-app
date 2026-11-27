@@ -4,12 +4,17 @@
  * The public catalog (getProducts / getProductById / getCatalogList) is CACHED on the server:
  * the database is queried at most once per CATALOG_REVALIDATE_SECONDS, no matter how many
  * visitors the site has. Admin saves/deletes invalidate the cache right away (revalidateCatalog).
+ *
+ * Only the server reads these tables (service role, migration 018): the public key in the browser
+ * can't, so the catalog can't be copied straight from the Supabase API. Because the service role
+ * skips RLS, every public read filters `is_active` itself.
  */
 import { revalidateTag, unstable_cache } from "next/cache";
 import { supabaseAdmin } from "@/db/clients/admin";
-import { publicClient } from "@/db/clients/public";
 import { readStockMap, variantAvailable, type StockMap } from "@/db/queries/stock";
 import type { Db } from "@/db/types";
+import { isMissingColumnError } from "@/db/queries/missing-column";
+import { readCutout } from "@/features/shop/lib/cutout";
 import { normalizeImages } from "@/features/shop/lib/product-images";
 import { stripBrandPrefix } from "@/features/shop/lib/product-name";
 import {
@@ -24,7 +29,7 @@ import {
   normalizeConcentration,
   normalizeGender,
   normalizeHexColor,
-  type ShopProduct,
+  type CatalogProduct,
   type Product,
   type ProductImage,
   type Variant,
@@ -36,6 +41,12 @@ export const CATALOG_REVALIDATE_SECONDS = 300;
 /* -------------------------------------------------------------------------- */
 /*  SELECT stringovi                                                          */
 /* -------------------------------------------------------------------------- */
+
+/**
+ * Processed bottle image (migration 017). Asked for separately: until the migration is run the column
+ * doesn't exist, and the catalog then loads without it instead of failing.
+ */
+const withCutout = (select: string) => `cutout, ${select}`;
 
 /** All perfume data + variants (catalog and admin list). */
 const PERFUME_FULL_SELECT = `
@@ -100,6 +111,7 @@ type CatalogProductRow = {
   notes: unknown;
   wear: unknown;
   is_featured: boolean | null;
+  cutout?: unknown;
   variants: CatalogVariantRow[] | null;
 };
 
@@ -149,6 +161,7 @@ function mapVariant(variant: CatalogVariantRow, stockMl: number | undefined): Va
 function mapRow(product: CatalogProductRow, sales?: Map<string, SalesInfo>, stock?: StockMap): Product {
   const salesInfo = sales?.get(product.id);
   const stockMl = stock?.get(product.id);
+  const images = normalizeImages(product.images);
   return {
     id: product.id,
     name: stripBrandPrefix(product.brand, product.name),
@@ -159,8 +172,9 @@ function mapRow(product: CatalogProductRow, sales?: Map<string, SalesInfo>, stoc
     onSale: Boolean(product.on_sale),
     rating: product.rating ?? null,
     votes: product.votes ?? null,
-    images: normalizeImages(product.images),
+    images,
     liquidColor: normalizeHexColor(product.liquid_color),
+    cutout: readCutout(product.cutout, images[0]?.url),
     accords: normalizeAccords(product.accords),
     notes: normalizeNotes(product.notes),
     wear: normalizeWear(product.wear),
@@ -190,29 +204,35 @@ async function fetchAllPages<T>(
   }
 }
 
+function readCatalogRows(select: string) {
+  return fetchAllPages<CatalogProductRow>((from, to) =>
+    supabaseAdmin
+      .from("perfumes")
+      .select(select)
+      // Hidden perfumes (admin "Hide from shop") aren't shown.
+      .eq("is_active", true)
+      // Perfumes with Fragrantica ratings first; unrated ones (null) go last, not first.
+      .order("votes", { ascending: false, nullsFirst: false })
+      .order("rating", { ascending: false, nullsFirst: false })
+      .order("id", { ascending: true })
+      .order("ml", { referencedTable: "perfume_variants", ascending: true })
+      .range(from, to)
+  );
+}
+
 async function fetchAllProducts(): Promise<Product[]> {
-  const [{ data, error }, sales, stock] = await Promise.all([
-    fetchAllPages<CatalogProductRow>((from, to) =>
-      publicClient
-        .from("perfumes")
-        .select(PERFUME_FULL_SELECT)
-        // Hidden perfumes (admin "Hide from shop") aren't shown; RLS hides them as well.
-        .eq("is_active", true)
-        // Perfumes with Fragrantica ratings first; unrated ones (null) go last, not first.
-        .order("votes", { ascending: false, nullsFirst: false })
-        .order("rating", { ascending: false, nullsFirst: false })
-        .order("id", { ascending: true })
-        .order("ml", { referencedTable: "perfume_variants", ascending: true })
-        .range(from, to)
+  const [rows, sales, stock] = await Promise.all([
+    readCatalogRows(withCutout(PERFUME_FULL_SELECT)).then((result) =>
+      isMissingColumnError(result.error) ? readCatalogRows(PERFUME_FULL_SELECT) : result
     ),
     fetchSalesRanking(),
     // Stock (ml in the bottle) is visible to the server only.
     readStockMap(supabaseAdmin),
   ]);
 
-  if (error) throw new Error(error.message);
+  if (rows.error) throw new Error(rows.error.message);
   // A perfume without prices (variants) isn't shown in the shop until the admin adds them.
-  return data.map((row) => mapRow(row, sales, stock)).filter((product) => product.variants.length > 0);
+  return rows.data.map((row) => mapRow(row, sales, stock)).filter((product) => product.variants.length > 0);
 }
 
 const cacheOptions = {
@@ -227,25 +247,41 @@ export const getProducts = unstable_cache(
   cacheOptions
 );
 
-/** Catalog without descriptions (/api/catalog): shop, header search, quiz and wishlist. */
+/**
+ * Light catalog (/api/catalog) for the shop, header search, quiz, wishlist and bundles: no description,
+ * no notes and only the main image. The quick view loads notes for one perfume when it opens
+ * (/api/catalog/[id]), so every visitor downloads about a third less.
+ */
 export const getCatalogList = unstable_cache(
-  async (): Promise<ShopProduct[]> =>
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (await fetchAllProducts()).map(({ description, ...rest }) => rest),
+  async (): Promise<CatalogProduct[]> =>
+    (await fetchAllProducts()).map(toListProduct),
   ["catalog:list"],
   cacheOptions
 );
 
+/** List shape of a product (see getCatalogList). */
+export function toListProduct(product: Product): CatalogProduct {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { description, notes, images, ...rest } = product;
+  return { ...rest, images: images.slice(0, 1) };
+}
+
+function readProductRow(id: string, select: string) {
+  return supabaseAdmin
+    .from("perfumes")
+    .select(select)
+    .eq("id", id)
+    .eq("is_active", true)
+    .order("ml", { referencedTable: "perfume_variants", ascending: true })
+    .maybeSingle();
+}
+
 export const getProductById = unstable_cache(
   async (id: string): Promise<Product | null> => {
     const [{ data, error }, sales, stock] = await Promise.all([
-      publicClient
-        .from("perfumes")
-        .select(PERFUME_FULL_SELECT)
-        .eq("id", id)
-        .eq("is_active", true)
-        .order("ml", { referencedTable: "perfume_variants", ascending: true })
-        .maybeSingle(),
+      readProductRow(id, withCutout(PERFUME_FULL_SELECT)).then((result) =>
+        isMissingColumnError(result.error) ? readProductRow(id, PERFUME_FULL_SELECT) : result
+      ),
       fetchSalesRanking(),
       readStockMap(supabaseAdmin, [id]),
     ]);

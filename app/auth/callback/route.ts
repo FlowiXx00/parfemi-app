@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/db/clients/server";
 import { hasSupabasePublicEnv } from "@/db/clients/env";
 import { sanitizeNextPath } from "@/lib/safe-next";
+import { claimGuestOrdersFor } from "@/features/account/server/claim-guest-orders";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
     console.error("exchangeCodeForSession ERROR:", error);
@@ -27,6 +28,9 @@ export async function GET(request: Request) {
       `${url.origin}/login?error=oauth_callback_failed`
     );
   }
+
+  // Google sign-in or a confirmed sign-up: earlier guest orders with this email join the account.
+  await claimGuestOrdersFor(data.user ?? null);
 
   return NextResponse.redirect(`${url.origin}${nextPath}`);
 }

@@ -474,3 +474,59 @@
     margin-top: 4px;
   }
 }
+
+/* ---------- Delivery and payment ---------- */
+.paidTag {
+  display: block;
+  margin-top: 2px;
+  color: #a9ebc4;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.trackingRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px;
+}
+
+.hintText {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.trackingLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 0;
+  font-size: 13px;
+}
+
+.trackingLink a {
+  color: var(--gold, #d2b070);
+  font-weight: 700;
+}
+
+.paidRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.paidYes {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #a9ebc4;
+  font-size: 13px;
+  font-weight: 700;
+}

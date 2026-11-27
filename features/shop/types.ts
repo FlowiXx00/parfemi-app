@@ -11,6 +11,8 @@ export const CONCENTRATIONS = [
 export type Concentration = (typeof CONCENTRATIONS)[number];
 
 import type { Accord, Notes, Wear } from "@/features/shop/lib/scent";
+export type { Notes };
+import type { BottleCutout } from "@/features/shop/lib/cutout";
 
 export type Variant = { ml: number; priceRsd: number; inStock: boolean };
 
@@ -30,6 +32,8 @@ export type Product = {
   images: ProductImage[];
   /** Liquid color (#rrggbb) entered by the admin; null = estimate from the image. */
   liquidColor: string | null;
+  /** Bottle image already processed on the server (features/shop/lib/cutout.ts); null = the browser does it. */
+  cutout: BottleCutout | null;
   /** Accords, strongest first. */
   accords: Accord[];
   notes: Notes;
@@ -44,11 +48,14 @@ export type Product = {
   variants: Variant[];
 };
 
-/** Lighter product shape for lists and search (no description or notes). */
+/** Lighter product shape for lists and search (no description or notes; /api/catalog keeps only the main image). */
 export type CatalogProduct = Omit<Product, "description" | "notes">;
 
-/** Perfume in the shop and /api/catalog: everything except the description (the quick view needs notes). */
-export type ShopProduct = Omit<Product, "description">;
+/** Perfume in the shop and /api/catalog: the list shape; the quick view loads notes on its own (/api/catalog/[id]). */
+export type ShopProduct = CatalogProduct;
+
+/** Per-perfume details the list leaves out (quick view). */
+export type ProductDetails = { notes: Notes };
 
 export function normalizeGender(value: unknown): Gender {
   return GENDERS.includes(value as Gender) ? (value as Gender) : "Unisex";

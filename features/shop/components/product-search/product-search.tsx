@@ -15,6 +15,7 @@ import { FiSearch } from "react-icons/fi";
 import styles from "./product-search.module.css";
 import { useCatalog } from "@/features/shop/client/catalog.api";
 import {
+  canOptimizeImage,
   getPrimaryImage,
   PRODUCT_IMAGE_FALLBACK,
 } from "@/features/shop/lib/product-images";
@@ -213,6 +214,7 @@ function HeaderSearchComponent({ onNavigate }: HeaderSearchProps) {
                     <div className={styles.thumb}>
                       <Image
                         src={getPrimaryImage(product)}
+                        unoptimized={!canOptimizeImage(getPrimaryImage(product))}
                         alt={product.name}
                         width={64}
                         height={64}

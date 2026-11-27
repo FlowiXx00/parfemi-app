@@ -737,6 +737,31 @@
   color: var(--orders-muted);
 }
 
+/* Delivered order: link to the perfume's review form */
+.reviewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 5px 12px;
+  border: 1px solid var(--gold-border);
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.reviewLink:hover {
+  border-color: color-mix(in srgb, var(--gold) 70%, transparent);
+}
+
+.reviewLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
 .itemPrice {
   font-size: 18px;
   font-weight: 700;
@@ -944,4 +969,19 @@
   .title {
     font-size: 22px;
   }
+}
+/* Shipment number (shipped / delivered orders) */
+.trackingWrap {
+  margin-bottom: 16px;
+}
+
+/* Payment received (marked by the shop) */
+.paidInfo {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--success-bg);
+  color: var(--success-fg);
+  font-size: 13px;
+  font-weight: 600;
 }

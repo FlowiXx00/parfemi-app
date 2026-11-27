@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { protectMutationRoute } from "@/lib/request-security";
+import { protectWithSharedLimit } from "@/lib/shared-rate-limit";
 import { supabaseAdmin } from "@/db/clients/admin";
 import { getCouponByCode } from "@/db/queries/coupons";
 import { checkCoupon, COUPON_CODE_RE, normalizeCouponCode } from "@/features/orders/lib/coupons";
@@ -18,6 +19,12 @@ export async function POST(req: NextRequest) {
 
   if (protection) {
     return protection;
+  }
+
+  // The same limit shared by all server instances (the one above only counts per process).
+  const sharedProtection = await protectWithSharedLimit(req, { key: "coupons:check", limit: 15, windowSeconds: 10 * 60 });
+  if (sharedProtection) {
+    return sharedProtection;
   }
 
   try {

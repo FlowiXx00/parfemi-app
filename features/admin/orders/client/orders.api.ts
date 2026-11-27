@@ -50,16 +50,20 @@ export async function loadOrders(
   return [];
 }
 
-export async function updateOrderStatusRequest(
-  id: number,
-  status: AdminOrderNextStatus
-): Promise<void> {
+/** Any combination: next status, Post Express shipment number ("" removes it), payment received. */
+export type OrderUpdatePatch = {
+  status?: AdminOrderNextStatus;
+  trackingNumber?: string;
+  paid?: boolean;
+};
+
+export async function updateOrderRequest(id: number, patch: OrderUpdatePatch): Promise<void> {
   const response = await fetch(`${API_BASE}/update`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id, status }),
+    body: JSON.stringify({ id, ...patch }),
   });
 
   const data = await readJsonSafe(response);
@@ -67,7 +71,11 @@ export async function updateOrderStatusRequest(
   if (!response.ok) {
     throw new AdminOrdersApiError(
       response.status,
-      resolveErrorMessage(data, "Greška pri ažuriranju statusa.")
+      resolveErrorMessage(data, "Greška pri ažuriranju porudžbine.")
     );
   }
+}
+
+export async function updateOrderStatusRequest(id: number, status: AdminOrderNextStatus): Promise<void> {
+  await updateOrderRequest(id, { status });
 }

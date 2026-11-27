@@ -508,3 +508,37 @@
     font-size: 18px;
   }
 }
+/* Social profiles (only the ones set in .env) */
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.socialLink {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--footer-border);
+  border-radius: 12px;
+  background: var(--footer-panel);
+  color: var(--footer-fg);
+  font-size: 20px;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.socialLink:hover {
+  background: var(--footer-panel-hover);
+  border-color: var(--gold-border);
+  transform: translateY(-1px);
+}
+
+.socialLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

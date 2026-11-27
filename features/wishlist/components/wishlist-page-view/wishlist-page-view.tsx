@@ -7,6 +7,7 @@ import { FiHeart, FiTrash2 } from "react-icons/fi";
 import styles from "./wishlist-page-view.module.css";
 import { fetchCatalog } from "@/features/shop/client/catalog.api";
 import {
+  canOptimizeImage,
   getPrimaryImage,
   PRODUCT_IMAGE_FALLBACK,
 } from "@/features/shop/lib/product-images";
@@ -16,6 +17,8 @@ import {
   removeFromWishlist,
 } from "@/features/wishlist/client/wishlist.api";
 import type { WishlistItem } from "@/features/wishlist/types";
+import { useSessionUser } from "@/features/auth/client/use-session-user";
+import StockAlertButton from "@/features/stock-alerts/components/stock-alert-button/stock-alert-button";
 import { formatRsd as formatPrice, getPriceBounds } from "@/lib/format";
 
 function getPriceRange(variants: WishlistProduct["variants"]) {
@@ -23,6 +26,7 @@ function getPriceRange(variants: WishlistProduct["variants"]) {
 }
 
 export default function WishlistPageView() {
+  const { isLoggedIn, ready: sessionReady } = useSessionUser();
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [products, setProducts] = useState<WishlistProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -186,6 +190,7 @@ export default function WishlistPageView() {
                     <div className={styles.imageWrap}>
                       <Image
                         src={getPrimaryImage(product)}
+                        unoptimized={!canOptimizeImage(getPrimaryImage(product))}
                         alt={product.name}
                         width={600}
                         height={600}
@@ -240,6 +245,16 @@ export default function WishlistPageView() {
                         Dodato: {new Date(meta.created_at).toLocaleDateString("sr-RS")}
                       </div>
                     ) : null}
+
+                    {!hasStock && (
+                      <StockAlertButton
+                        productId={product.id}
+                        variants={product.variants}
+                        isLoggedIn={isLoggedIn}
+                        sessionReady={sessionReady}
+                        compact
+                      />
+                    )}
 
                     <div className={styles.actions}>
                       <Link href={`/shop/${product.id}`} className={styles.secondaryBtn}>

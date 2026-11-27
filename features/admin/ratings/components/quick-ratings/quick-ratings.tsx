@@ -15,9 +15,11 @@ import {
   fragranticaSearchUrl,
   googleSearchUrl,
   isFragranticaOrigin,
+  isWantRequest,
   parsePastedRating,
   parseReading,
   titleMatchScore,
+  wantReply,
   type FragranticaReading,
 } from "../../lib/fragrantica";
 import AdminPageHeader from "@/features/admin/ui/admin-page-header";
@@ -125,7 +127,7 @@ export default function QuickRatings() {
     if (!perfume) return;
     // No "noopener": this way the Fragrantica tab knows who opened it, so the button can post the rating
     // back.
-    window.open(fragranticaSearchUrl(perfume.brand, perfume.name), FRAGRANTICA_WINDOW_NAME);
+    window.open(fragranticaSearchUrl(perfume.brand, perfume.name, perfume.concentration), FRAGRANTICA_WINDOW_NAME);
   }, []);
 
   const save = useCallback(
@@ -178,16 +180,21 @@ export default function QuickRatings() {
     [current, save]
   );
 
-  // Message from the Fragrantica tab (postMessage), accepted only from Fragrantica domains.
+  // Message from the Fragrantica tab (postMessage), accepted only from Fragrantica domains:
+  // either "which perfume is next?" (search page) or a rating.
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       if (!isFragranticaOrigin(event.origin)) return;
+      if (isWantRequest(event.data)) {
+        if (current) (event.source as Window | null)?.postMessage(wantReply(current), event.origin);
+        return;
+      }
       const reading = parseReading(event.data);
       if (reading) receive(reading);
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [receive]);
+  }, [current, receive]);
 
   // Link between admin tabs (same site): if the button opens a NEW admin tab, it forwards the rating to
   // the tab you're already working in and closes, so tabs don't pile up.
@@ -380,13 +387,18 @@ export default function QuickRatings() {
             </a>
           </li>
           <li>
-            Klikni <strong>„Traži na Fragrantici”</strong> → otvori pravi parfem u rezultatima → klikni{" "}
-            <strong>⭐ Pošalji ocenu</strong> na traci. Ocena se sačuva ovde i odmah se otvara sledeći parfem.
+            Klikni <strong>„Traži na Fragrantici”</strong>, sačekaj rezultate i klikni <strong>⭐ Pošalji ocenu</strong>{" "}
+            na traci. Dugme samo nađe tačan parfem, ocena se sačuva ovde i odmah se otvara sledeći. Jedan klik po
+            parfemu.
+          </li>
+          <li>
+            Ako dugme nije sigurno koja je verzija, otvori pravi parfem iz rezultata i klikni{" "}
+            <strong>⭐ Pošalji ocenu</strong> na njegovoj strani.
           </li>
         </ol>
         <p className={styles.hint}>
-          Fragranticu otvaraš ti, stranu po stranu — dugme samo prepiše dva broja sa strane koju gledaš.
-          Ako klikneš pogrešnu verziju (npr. „Intense”), ovde ćeš dobiti upozorenje pre čuvanja.
+          Ako si dugme dodao ranije, obriši staro i prevuci ovo novo. Ako se ocena ne poklapa sa nazivom (npr.
+          „Intense”), ovde ćeš dobiti upozorenje pre čuvanja.
         </p>
       </details>
 

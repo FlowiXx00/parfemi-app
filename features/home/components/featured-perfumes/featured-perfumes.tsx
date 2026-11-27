@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import ShowcaseCard from "@/features/shop/components/showroom/showcase-card";
 import type { CatalogProduct } from "@/features/shop/types";
+import { brandHref } from "@/features/shop/lib/brands";
 import styles from "./featured-perfumes.module.css";
 
 /** Quick shop entries with a scent/season filter applied (see features/shop/lib/scent-filters). */
@@ -76,14 +77,14 @@ export default function FeaturedPerfumes({ products, brands, total }: Props) {
             <ul className={styles.brandList}>
               {brands.map((brand) => (
                 <li key={brand.name}>
-                  <Link href={`/shop?q=${encodeURIComponent(brand.name)}`} className={styles.brandChip}>
+                  <Link href={brandHref(brand.name)} className={styles.brandChip}>
                     {brand.name}
                     <span>{brand.count}</span>
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/shop" className={`${styles.brandChip} ${styles.brandChipAll}`}>
+                <Link href="/brendovi" className={`${styles.brandChip} ${styles.brandChipAll}`}>
                   Svi brendovi →
                 </Link>
               </li>

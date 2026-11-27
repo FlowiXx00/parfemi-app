@@ -6,6 +6,7 @@ import { addToCartAnimated } from "@/features/cart/lib/add-to-cart-animated";
 import { useCatalog } from "@/features/shop/client/catalog.api";
 import { getPrimaryImage } from "@/features/shop/lib/product-images";
 import BottleImg from "@/features/shop/components/showroom/bottle-img";
+import { cutoutFor } from "@/features/shop/lib/cutout";
 import type { CatalogProduct, ShopProduct } from "@/features/shop/types";
 import {
   CUSTOM_BUNDLE_MAX,
@@ -129,7 +130,7 @@ export default function BundleBuilder() {
             <li key={index} className={product ? styles.slotFilled : styles.slot}>
               {product ? (
                 <>
-                  <BottleImg src={getPrimaryImage(product)} className={styles.slotBottle} />
+                  <BottleImg src={getPrimaryImage(product)} precomputed={cutoutFor(product, 384)} className={styles.slotBottle} />
                   <span className={styles.slotName}>
                     <small>{product.brand}</small>
                     {product.name}
@@ -167,7 +168,7 @@ export default function BundleBuilder() {
               return (
                 <li key={product.id}>
                   <button type="button" onClick={() => add(product.id)}>
-                    <BottleImg src={getPrimaryImage(product)} className={styles.resultBottle} />
+                    <BottleImg src={getPrimaryImage(product)} precomputed={cutoutFor(product, 384)} className={styles.resultBottle} />
                     <span className={styles.resultName}>
                       <small>{product.brand}</small>
                       {product.name}

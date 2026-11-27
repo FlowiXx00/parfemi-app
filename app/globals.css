@@ -858,3 +858,11 @@ html[data-theme="dark"] {
     --vial-bulb: #6e5444;
   }
 }
+
+/* Shop product photos (ImageGuard): no iOS long-press "Save image" menu, no dragging out of the page. */
+html.protect-images img,
+html.protect-images canvas {
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}

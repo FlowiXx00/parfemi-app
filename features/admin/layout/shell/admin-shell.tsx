@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   PiArrowSquareOut,
+  PiChatCircleText,
   PiGear,
   PiGift,
   PiList,
@@ -55,6 +56,7 @@ export default function AdminShell({
         { href: "/admin/perfumes", label: "Parfemi", icon: PiDrop },
         { href: "/admin/paketi", label: "Paketi", icon: PiGift },
         { href: "/admin/ocene", label: "Ocene", icon: PiStar },
+        { href: "/admin/recenzije", label: "Recenzije", icon: PiChatCircleText },
       ],
     },
     { label: "Marketing", items: [{ href: "/admin/kuponi", label: "Kuponi", icon: PiTicket }] },

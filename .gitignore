@@ -46,3 +46,6 @@ next-env.d.ts
 /docs/local/
 /AGENTS.md
 /CLAUDE.md
+
+# local backup: images and database schema (never pushed)
+/BAZA I SLIKE/

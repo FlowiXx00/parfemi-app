@@ -2,6 +2,12 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProductById, getProducts } from "@/db/queries/perfumes";
+import { getProductReviews } from "@/db/queries/reviews";
+import {
+  EMPTY_PRODUCT_REVIEWS,
+  reviewsStructuredData,
+  type ProductReviews,
+} from "@/features/reviews/lib/reviews";
 import type { CatalogProduct, Product } from "@/features/shop/types";
 import { findSimilar } from "@/features/shop/lib/similar";
 import { prepareRichText } from "@/lib/rich-text";
@@ -125,11 +131,12 @@ export async function generateMetadata({
 }
 
 /**
- * Structured data for Google (schema.org Product): name, brand, image and prices per volume.
+ * Structured data for Google (schema.org Product): name, brand, image, prices per volume and the
+ * reviews of this shop's verified customers (aggregateRating + the newest reviews).
  * The Fragrantica rating is NOT included: Google requires ratings in this markup to come from this
  * site's own customers.
  */
-function productJsonLd(product: Product) {
+function productJsonLd(product: Product, reviews: ProductReviews) {
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/shop/${product.id}`;
   const prices = product.variants.map((variant) => variant.priceRsd).filter((price) => price > 0);
@@ -157,6 +164,7 @@ function productJsonLd(product: Product) {
           },
         }
       : {}),
+    ...reviewsStructuredData(reviews),
   };
 }
 
@@ -170,8 +178,17 @@ export default async function Page({
   const product = await getProduct(id);
   if (!product) return notFound();
 
+  const [catalog, reviews] = await Promise.all([
+    getProducts().catch(() => []),
+    // Reviews are cached per perfume; if they can't be loaded the page still renders (without them).
+    getProductReviews(product.id).catch((error: unknown) => {
+      console.error("Recenzije nisu učitane:", error);
+      return EMPTY_PRODUCT_REVIEWS;
+    }),
+  ]);
+
   // Similar perfumes from the cached catalog (no extra query); cards don't need description or notes.
-  const similar: CatalogProduct[] = findSimilar(product, await getProducts().catch(() => [])).map(
+  const similar: CatalogProduct[] = findSimilar(product, catalog).map(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ({ description, notes, ...rest }) => rest
   );
@@ -181,10 +198,10 @@ export default async function Page({
       <script
         type="application/ld+json"
         // "<" -> < so text from the database can't close the <script> tag
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product, reviews)).replace(/</g, "\\u003c") }}
       />
       {/* key: switching to another perfume mounts a fresh component (resets gallery, quantity and selected volume). */}
-      <DetailsClient key={product.id} product={product} similar={similar} />
+      <DetailsClient key={product.id} product={product} similar={similar} reviews={reviews} />
     </>
   );
 }

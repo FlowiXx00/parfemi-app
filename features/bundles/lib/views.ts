@@ -2,6 +2,7 @@ import "server-only";
 import { getActiveBundles } from "@/db/queries/bundles";
 import { getProducts } from "@/db/queries/perfumes";
 import { getPrimaryImage } from "@/features/shop/lib/product-images";
+import { cutoutFor } from "@/features/shop/lib/cutout";
 import { priceBundle } from "./bundles";
 
 export type BundleView = {
@@ -13,7 +14,8 @@ export type BundleView = {
   regular: number;
   price: number;
   available: boolean;
-  items: { id: string; brand: string; name: string; image: string }[];
+  /** cutout = bottle image already processed on the server (null = processed in the browser). */
+  items: { id: string; brand: string; name: string; image: string; cutout: { src: string; color: string | null } | null }[];
 };
 
 /** Active bundles with their perfumes and current price (from the cached catalog, stock-aware). */
@@ -27,7 +29,13 @@ export async function getBundleViews(): Promise<BundleView[]> {
       const items = bundle.perfume_ids
         .map((id) => byId.get(id))
         .filter((product) => product !== undefined)
-        .map((product) => ({ id: product.id, brand: product.brand, name: product.name, image: getPrimaryImage(product) }));
+        .map((product) => ({
+          id: product.id,
+          brand: product.brand,
+          name: product.name,
+          image: getPrimaryImage(product),
+          cutout: cutoutFor(product, 384),
+        }));
       return {
         id: bundle.id,
         title: bundle.title,

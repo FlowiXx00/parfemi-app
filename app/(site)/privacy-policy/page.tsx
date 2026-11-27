@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       kicker="Pravne informacije"
       title="Politika privatnosti"
       intro="Ovde je objašnjeno koje podatke o ličnosti obrađujemo kada koristiš sajt, zašto, koliko dugo ih čuvamo i koja su tvoja prava, u skladu sa Zakonom o zaštiti podataka o ličnosti."
-      updated="20. novembar 2026."
+      updated="27. novembar 2026."
       sections={[
         {
           title: "Ko obrađuje podatke",
@@ -29,6 +29,9 @@ export default function PrivacyPage() {
           body: [
             "Porudžbina: ime i prezime, email, broj telefona, grad i adresa za dostavu, napomena i sadržaj porudžbine.",
             "Nalog (ako ga otvoriš): email, ime i šifrovana lozinka ili prijava preko Google naloga, sačuvane adrese i lista želja.",
+            "Recenzije (ako ih ostaviš): ocena, tekst, zapremina koju si kupio/la i datum. Uz recenziju se javno prikazuju samo tvoje ime i početno slovo prezimena (npr. „Marko P.”) i oznaka „Verifikovan kupac”.",
+            "Obaveštenja (ako ih uključiš): parfemi za koje si tražio/la „Javi mi kad bude na stanju” i da li želiš novosti i akcije, sa vremenom kada si pristao/la.",
+            "Zaštita od zloupotrebe: da bi AI savetnik i provera kupona imali ograničen broj pokušaja, čuvamo brojač vezan za šifrovani otisak IP adrese (ne samu adresu), najduže dva dana.",
             "Tehnički podaci: korpa, izbor kolačića i istorija razgovora sa AI savetnikom čuvaju se samo u tvom pregledaču (lokalno skladište), ne na našem serveru.",
           ],
         },
@@ -38,6 +41,9 @@ export default function PrivacyPage() {
             "Izvršenje ugovora: prijem, slanje i dostava porudžbine, obaveštenja o statusu porudžbine i rešavanje reklamacija.",
             "Zakonska obaveza: čuvanje podataka o prodaji u skladu sa propisima o računovodstvu i zaštiti potrošača.",
             "Pristanak: analitika poseta (Google Analytics, Meta pixel) radi samo ako prihvatiš kolačiće; pristanak možeš povući u svakom trenutku.",
+            "Pristanak: recenziju objavljujemo jer si je sam/a napisao/la; možeš je izmeniti ili obrisati u svakom trenutku na stranici parfema. Recenzije koje su uvredljive ili nisu o proizvodu uklanjamo.",
+            "Pristanak: mejl „ponovo na stanju” šaljemo samo za parfeme za koje si to tražio/la (jednom po zahtevu), a novosti i akcije samo ako si ih uključio/la u podešavanjima naloga. Oba možeš otkazati u svakom trenutku na istom mestu.",
+            "Izvršenje ugovora: nekoliko dana posle isporuke šaljemo jednu poruku sa molbom da oceniš kupljene parfeme. Ako kasnije napraviš nalog sa istom email adresom (potvrđenom), ranije porudžbine sa te adrese se povezuju sa nalogom da bi ih video/la na jednom mestu.",
           ],
         },
         {
@@ -50,7 +56,7 @@ export default function PrivacyPage() {
         {
           title: "Koliko dugo čuvamo podatke",
           body: [
-            "Podatke o porudžbinama čuvamo onoliko koliko propisi o računovodstvu i zaštiti potrošača zahtevaju, a podatke o nalogu dok nalog postoji.",
+            "Podatke o porudžbinama čuvamo onoliko koliko propisi o računovodstvu i zaštiti potrošača zahtevaju, a podatke o nalogu dok nalog postoji. Recenzije čuvamo dok ih ne obrišeš ili dok postoji nalog.",
             "Ako obrišeš nalog, brišemo podatke koji nam više nisu potrebni; podatke o ranijim porudžbinama čuvamo do isteka zakonskog roka.",
           ],
         },

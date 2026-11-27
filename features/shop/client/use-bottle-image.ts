@@ -8,20 +8,26 @@ import {
   type ProcessedBottle,
 } from "@/features/shop/lib/bottle-image";
 
+/** Image already processed on the server (features/shop/lib/cutout.ts). */
+export type PrecomputedBottle = { src: string; color: string | null };
+
 /**
  * Bottle image without the white background + liquid color.
- * `enabled` = false postpones processing (e.g. until the card is on screen).
+ * With `precomputed` (made once on the server) nothing is processed in the browser at all; otherwise
+ * the image is processed here. `enabled` = false postpones processing (e.g. until the card is on screen).
  */
 export function useBottleImage(
   src: string,
   width: BottleImageWidth,
-  enabled = true
+  enabled = true,
+  precomputed: PrecomputedBottle | null = null
 ) {
   const key = `${width}|${src}`;
   const [result, setResult] = useState<(ProcessedBottle & { key: string }) | null>(null);
+  const hasPrecomputed = precomputed !== null;
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || hasPrecomputed) return;
 
     let active = true;
 
@@ -32,7 +38,11 @@ export function useBottleImage(
     return () => {
       active = false;
     };
-  }, [src, width, enabled]);
+  }, [src, width, enabled, hasPrecomputed]);
+
+  if (precomputed) {
+    return { src: precomputed.src, color: precomputed.color ?? FALLBACK_LIQUID_COLOR, ready: true };
+  }
 
   // The result is only valid for the image it was made for.
   const current = result?.key === key ? result : null;

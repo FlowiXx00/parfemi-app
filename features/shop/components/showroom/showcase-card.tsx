@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { memo, useMemo, useRef, type MouseEvent } from "react";
+import { memo, useMemo, useRef, useState, type MouseEvent } from "react";
 import { PiFire, PiStarFill } from "react-icons/pi";
 import { useBottleImage, useInViewOnce } from "@/features/shop/client/use-bottle-image";
+import { cutoutFor } from "@/features/shop/lib/cutout";
 import { getPrimaryImage, PRODUCT_IMAGE_FALLBACK } from "@/features/shop/lib/product-images";
 import EmptyBottle from "./empty-bottle";
 import FragranticaRating from "../fragrantica-rating/fragrantica-rating";
@@ -23,7 +24,11 @@ type Props = {
 function ShowcaseCardComponent({ product, onOpen }: Props) {
   const cardRef = useRef<HTMLElement | null>(null);
   const inView = useInViewOnce(cardRef);
-  const bottle = useBottleImage(getPrimaryImage(product), 384, inView);
+  // Ready-made image from the server when there is one (no work for the browser); if that file fails to
+  // load, the card falls back to processing the original image here.
+  const [cutoutBroken, setCutoutBroken] = useState(false);
+  const precomputed = cutoutBroken ? null : cutoutFor(product, 384);
+  const bottle = useBottleImage(getPrimaryImage(product), 384, inView, precomputed);
 
   const soldOut = product.variants.every((variant) => !variant.inStock);
 
@@ -97,13 +102,17 @@ function ShowcaseCardComponent({ product, onOpen }: Props) {
           {bottle.ready && bottle.src === PRODUCT_IMAGE_FALLBACK ? (
             <EmptyBottle className={styles.bottleEmpty} />
           ) : bottle.ready && bottle.src ? (
-            // The processed image (no background) is a blob: URL, so it goes through a plain <img>.
+            // The processed image (no background) is a blob: URL or a ready-made file in our Storage, so it
+            // goes through a plain <img> (no second round through the image optimizer).
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={bottle.src}
               alt=""
               className={styles.bottle}
               draggable={false}
+              loading="lazy"
+              decoding="async"
+              onError={() => precomputed && setCutoutBroken(true)}
             />
           ) : (
             <span className={styles.bottlePlaceholder} />
@@ -123,6 +132,9 @@ function ShowcaseCardComponent({ product, onOpen }: Props) {
         <span className={styles.brand}>{product.brand}</span>
         <Link
           href={`/shop/${product.id}`}
+          // A regular click opens the quick view, so prefetching every product page while the visitor
+          // scrolls the shop would only cost requests (and server renders) that are never used.
+          prefetch={false}
           className={styles.name}
           onClick={handleNameClick}
           title={product.name}
